@@ -1,0 +1,606 @@
+openapi: 3.1.0
+info:
+  title: OCTO API Specification Availability API
+  version: '1.0'
+  contact:
+    email: sayhello@octo.travel
+    url: https://www.octo.travel/contact
+    name: OCTO Standards NP Inc
+  description: 'OCTO (Open Connectivity for Tours, Activities, and Attractions) is an open standard API specification for the in-destination experiences sector of the travel industry. The standard defines agreed-upon schemas, endpoints, and capabilities commonly needed when connecting platforms, resellers, OTAs, and other technologies in tours, activities, and attractions._
+
+
+    OCTO is open source. Available to anyone who wants to use it. You do not need to be a member to use this specification in your business.'
+servers:
+- url: https://api.example.com/octo
+tags:
+- name: Availability
+  externalDocs:
+    url: https://docs.octo.travel/octo-core/availability
+    description: Docs
+paths:
+  /availability/calendar:
+    post:
+      summary: Availability Calendar
+      tags:
+      - Availability
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  x-examples:
+                    example-1:
+                      localDate: '2022-05-12'
+                      available: false
+                      status: CLOSED
+                      vacancies: 0
+                      capacity: null
+                      openingHours:
+                      - from: 08:00
+                        to: '18:30'
+                  examples:
+                  - localDate: '2022-05-12'
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 10
+                    capacity: 10
+                    openingHours:
+                    - from: 08:00
+                      to: '16:00'
+                  description: Schema for the `/avalibility/calendar` endpoint. For querying general open slots per day on a large range of days versus availability per departure time.
+                  properties:
+                    localDate:
+                      type: string
+                      example: '2022-05-12'
+                      description: A single date to query. Must be ISO 8601 compliant date.
+                      format: date
+                    available:
+                      type: boolean
+                      description: Whether there is availability for this date / slot.
+                    status:
+                      type: string
+                      title: AvailabilityStatus
+                      x-stoplight:
+                        id: tmiby64nsmjy8
+                      enum:
+                      - AVAILABLE
+                      - FREESALE
+                      - SOLD_OUT
+                      - LIMITED
+                      - CLOSED
+                      description: 'The status of that date. Possible values are:
+
+                        `AVAILABLE` This availability is available for sale
+
+                        `FREESALE` This availability has no capacity and is available.
+
+                        `SOLD_OUT` There are no more spots available for this date / slot.
+
+                        `LIMITED` This availability is available but has less than 50% capacity left.
+
+                        `CLOSED` Availability is closed for this day / slot.'
+                      example: AVAILABLE
+                      examples:
+                      - AVAILABLE
+                    vacancies:
+                      type:
+                      - integer
+                      - 'null'
+                      example: 10
+                      description: This SHOULD NOT be returned when status is `FREESALE`. This SHOULD be a shared pool for all Unit types in the Option. If availability is tracked per-Unit then this value MUST be equal to the available quantity for the Unit that has the most remaining.
+                    capacity:
+                      type:
+                      - integer
+                      - 'null'
+                      example: 10
+                      description: The total capacity on this day.
+                    openingHours:
+                      type: array
+                      items:
+                        type: object
+                        x-examples:
+                          example-1:
+                            from: 08:00
+                            to: '18:30'
+                        description: A list of opening hours that the product is open on this day.
+                        properties:
+                          from:
+                            type: string
+                            example: 08:00
+                            description: When this product opens (HH:MM)
+                          to:
+                            type: string
+                            example: '16:00'
+                            description: When this product closes (HH:MM)
+                        required:
+                        - from
+                        - to
+                        examples:
+                        - from: 08:00
+                          to: '16:00'
+                  required:
+                  - localDate
+                  - available
+                  - status
+                  - vacancies
+                  - capacity
+                  - openingHours
+              examples:
+                START_TIMES:
+                  value:
+                  - localDate: '2022-06-14'
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 20
+                    capacity: 20
+                    openingHours: []
+                  - localDate: '2022-06-15'
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 10
+                    capacity: 10
+                    openingHours: []
+                  - localDate: '2022-06-16'
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 10
+                    capacity: 10
+                    openingHours: []
+                OPENING_HOURS:
+                  value:
+                  - localDate: '2022-06-14'
+                    available: true
+                    status: FREESALE
+                    vacancies: null
+                    capacity: null
+                    openingHours:
+                    - from: 09:00
+                      to: '17:00'
+                  - localDate: '2022-06-15'
+                    available: true
+                    status: FREESALE
+                    vacancies: null
+                    capacity: null
+                    openingHours:
+                    - from: 09:00
+                      to: '17:00'
+                  - localDate: '2022-06-16'
+                    available: true
+                    status: FREESALE
+                    vacancies: null
+                    capacity: null
+                    openingHours:
+                    - from: 09:00
+                      to: '17:00'
+        '400':
+          description: Example response
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    error: INVALID_PRODUCT_ID
+                    errorMessage: The productId was missing or invalid
+                    productId: 7c3eb026-3d36-4981-9c56-28d8a52a54dd
+                additionalProperties: false
+                properties:
+                  error:
+                    type: string
+                  errorMessage:
+                    type: string
+                  productId:
+                    type: string
+                  optionId:
+                    type: string
+                required:
+                - error
+                - errorMessage
+              examples:
+                INVALID_PRODUCT_ID:
+                  value:
+                    error: INVALID_PRODUCT_ID
+                    errorMessage: The productId was missing or invalid
+                    productId: cc2a6d56-6efe-426f-99c9-6eb10e341565
+                INVALID_OPTION_ID:
+                  value:
+                    error: INVALID_OPTION_ID
+                    errorMessage: The optionId was missing or invalid
+                    optionId: 681fea0f-196e-45da-bec7-467bfacb1d87
+                BAD_REQUEST:
+                  value:
+                    error: BAD_REQUEST
+                    errorMessage: cannot request more than 1 year of availability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  example: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  description: The product id.
+                optionId:
+                  type: string
+                  example: DEFAULT
+                  description: The option id.
+                localDateStart:
+                  type: string
+                  example: '2022-05-23'
+                  description: Start date to query for (YYYY-MM-DD).
+                localDateEnd:
+                  type: string
+                  example: '2022-05-29'
+                  description: End date to query for (YYYY-MM-DD).
+                units:
+                  type: array
+                  description: A list of units.
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The unit id.
+                      quantity:
+                        type: integer
+                        description: The quantity of the unit.
+                    required:
+                    - id
+                    - quantity
+              required:
+              - productId
+              - optionId
+              - localDateStart
+              - localDateEnd
+            examples:
+              Date Range:
+                value:
+                  productId: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  optionId: DEFAULT
+                  localDateStart: '2022-06-14'
+                  localDateEnd: '2022-06-16'
+              WITH UNITS:
+                value:
+                  productId: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  optionId: DEFAULT
+                  localDateStart: '2022-06-14'
+                  localDateEnd: '2022-06-16'
+                  units:
+                  - id: adult
+                    quantity: 2
+                  - id: child
+                    quantity: 1
+      description: 'This endpoint is highly optimised and will return a single object per day. It''s designed to be queried for large date ranges and the result is used to populate an availability calendar.
+
+
+        When the end user selects an open date you can call on `/availability` endpoint to get the `availabilityId` to create the booking.'
+  /availability:
+    post:
+      summary: Availability Check
+      tags:
+      - Availability
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  x-examples:
+                    example-1:
+                      id: '2022-05-23T00:00:00+01:00'
+                      localDateTimeStart: '2022-05-23T00:00:00+01:00'
+                      localDateTimeEnd: '2022-05-24T00:00:00+01:00'
+                      allDay: true
+                      available: true
+                      status: FREESALE
+                      vacancies: null
+                      capacity: null
+                      maxUnits: 9
+                      utcCutoffAt: '2022-05-22T23:00:00Z'
+                      openingHours:
+                      - from: 08:00
+                        to: '18:30'
+                  examples:
+                  - id: '2022-06-30T00:00:00+01:00'
+                    localDateTimeStart: '2022-06-30T00:00:00+01:00'
+                    localDateTimeEnd: '2022-07-01T00:00:00+01:00'
+                    allDay: true
+                    available: true
+                    status: FREESALE
+                    vacancies: null
+                    capacity: null
+                    maxUnits: null
+                    utcCutoffAt: '2022-06-29T22:00:00Z'
+                    openingHours:
+                    - from: 09:00
+                      to: '17:00'
+                  - id: '2022-06-30T12:00:00+01:00'
+                    localDateTimeStart: '2022-06-30T12:00:00+01:00'
+                    localDateTimeEnd: '2022-06-30T14:00:00+01:00'
+                    allDay: false
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 10
+                    capacity: 10
+                    maxUnits: null
+                    utcCutoffAt: '2022-06-30T10:00:00Z'
+                    openingHours: []
+                  title: ''
+                  description: Schema for the `/avalibility/calendar` endpoint. It's designed to be queried for large date ranges and the result is used to populate an availability calendar.
+                  properties:
+                    id:
+                      type: string
+                      example: '2022-05-23T00:00:00+01:00'
+                      description: The availability id, you''ll need this when booking. MUST be a unique identifier within the scope of an option.
+                    localDateTimeStart:
+                      type: string
+                      example: '2022-05-23T00:00:00+01:00'
+                      description: The start time for this availability. This will be in the local time zone of the product. Must be an `ISO 8601` compliant date and time.
+                      format: date-time
+                    localDateTimeEnd:
+                      type: string
+                      example: '2022-05-24T00:00:00+01:00'
+                      description: The end time for this availability. This will be in the local time zone of the product. Must be an `ISO 8601` compliant date and time.
+                      format: date-time
+                    allDay:
+                      type: boolean
+                      description: A boolean field indicating whether this is an all day availability and not a fixed departure time. If this value is true then there will be no other availability object on the same day.
+                    available:
+                      type: boolean
+                      description: Whether there is availability for this date / slot.
+                    status:
+                      type: string
+                      title: AvailabilityStatus
+                      x-stoplight:
+                        id: tmiby64nsmjy8
+                      enum:
+                      - AVAILABLE
+                      - FREESALE
+                      - SOLD_OUT
+                      - LIMITED
+                      - CLOSED
+                      description: 'The status of that date. Possible values are:
+
+                        `AVAILABLE` This availability is available for sale
+
+                        `FREESALE` This availability has no capacity and is available.
+
+                        `SOLD_OUT` There are no more spots available for this date / slot.
+
+                        `LIMITED` This availability is available but has less than 50% capacity left.
+
+                        `CLOSED` Availability is closed for this day / slot.'
+                      example: AVAILABLE
+                      examples:
+                      - AVAILABLE
+                    vacancies:
+                      type:
+                      - integer
+                      - 'null'
+                      example: 10
+                      description: This SHOULD NOT be returned when status is `FREESALE`. This SHOULD be a shared pool for all Unit types in the Option. If availability is tracked per-Unit then this value MUST be equal to the available quantity for the Unit that has the most remaining.
+                    capacity:
+                      type:
+                      - integer
+                      - 'null'
+                      example: 10
+                      description: The total capacity on this day.
+                    maxUnits:
+                      type:
+                      - integer
+                      - 'null'
+                      example: 10
+                      description: Maximum number of units that can be sold within one booking on this day / slot.
+                    utcCutoffAt:
+                      type: string
+                      example: '2022-05-22T23:00:00Z'
+                      description: 'The time by which the booking must be confirmed at '
+                    openingHours:
+                      type: array
+                      items:
+                        type: object
+                        x-examples:
+                          example-1:
+                            from: 08:00
+                            to: '18:30'
+                        description: A list of opening hours that the product is open on this day.
+                        properties:
+                          from:
+                            type: string
+                            example: 08:00
+                            description: When this product opens (HH:MM)
+                          to:
+                            type: string
+                            example: '16:00'
+                            description: When this product closes (HH:MM)
+                        required:
+                        - from
+                        - to
+                        examples:
+                        - from: 08:00
+                          to: '16:00'
+                  required:
+                  - id
+                  - localDateTimeStart
+                  - localDateTimeEnd
+                  - allDay
+                  - available
+                  - status
+                  - vacancies
+                  - capacity
+                  - maxUnits
+                  - utcCutoffAt
+                  - openingHours
+              examples:
+                OPENING_HOURS:
+                  value:
+                  - id: '2022-06-30T00:00:00+01:00'
+                    localDateTimeStart: '2022-06-30T00:00:00+01:00'
+                    localDateTimeEnd: '2022-07-01T00:00:00+01:00'
+                    allDay: true
+                    available: true
+                    status: FREESALE
+                    vacancies: null
+                    capacity: null
+                    maxUnits: null
+                    utcCutoffAt: '2022-06-29T22:00:00Z'
+                    openingHours:
+                    - from: 09:00
+                      to: '17:00'
+                START_TIMES:
+                  value:
+                  - id: '2022-06-30T12:00:00+01:00'
+                    localDateTimeStart: '2022-06-30T12:00:00+01:00'
+                    localDateTimeEnd: '2022-06-30T14:00:00+01:00'
+                    allDay: false
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 10
+                    capacity: 10
+                    maxUnits: null
+                    utcCutoffAt: '2022-06-30T10:00:00Z'
+                    openingHours: []
+                  - id: '2022-06-30T14:00:00+01:00'
+                    localDateTimeStart: '2022-06-30T14:00:00+01:00'
+                    localDateTimeEnd: '2022-06-30T16:00:00+01:00'
+                    allDay: false
+                    available: true
+                    status: AVAILABLE
+                    vacancies: 10
+                    capacity: 10
+                    maxUnits: null
+                    utcCutoffAt: '2022-06-30T12:00:00Z'
+                    openingHours: []
+        '400':
+          description: Example response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  error:
+                    type: string
+                  errorMessage:
+                    type: string
+                  productId:
+                    type: string
+                  optionId:
+                    type: string
+                required:
+                - error
+                - errorMessage
+              examples:
+                INVALID_PRODUCT_ID:
+                  value:
+                    error: INVALID_PRODUCT_ID
+                    errorMessage: The productId was missing or invalid
+                    productId: cc2a6d56-6efe-426f-99c9-6eb10e341565
+                INVALID_OPTION_ID:
+                  value:
+                    error: INVALID_OPTION_ID
+                    errorMessage: The optionId was missing or invalid
+                    optionId: 681fea0f-196e-45da-bec7-467bfacb1d87
+                BAD_REQUEST:
+                  value:
+                    error: BAD_REQUEST
+                    errorMessage: either localDate, localDateStart/localDateEnd or availabilityIds is required
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  example: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  description: The product id.
+                optionId:
+                  type: string
+                  example: DEFAULT
+                  description: The option id.
+                localDateStart:
+                  type: string
+                  example: '2022-05-23'
+                  format: date
+                  description: Start date to query for (YYYY-MM-DD). Required if `localDateEnd` is set.
+                localDateEnd:
+                  type: string
+                  format: date
+                  example: '2022-05-29'
+                  description: End date to query for (YYYY-MM-DD). Required if `localDateStart` is set.
+                availabilityIds:
+                  type: array
+                  example:
+                  - '2022-05-23T00:00:00+01:00'
+                  description: Filter the results by the given ids.
+                  items:
+                    type: string
+                units:
+                  type: array
+                  description: A list of units.
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The unit id.
+                      quantity:
+                        type: integer
+                        description: The quantity of the unit.
+                    required:
+                    - id
+                    - quantity
+              required:
+              - productId
+              - optionId
+            examples:
+              Date Range:
+                value:
+                  productId: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  optionId: DEFAULT
+                  localDateStart: '2022-05-23'
+                  localDateEnd: '2022-05-29'
+              Availability IDs:
+                value:
+                  productId: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  optionId: DEFAULT
+                  availabilityIds:
+                  - '2022-05-23T00:00:00+01:00'
+              With Units:
+                value:
+                  productId: 6b903d44-dc24-4ca4-ae71-6bde6c4f4854
+                  optionId: DEFAULT
+                  localDateStart: '2022-05-23'
+                  localDateEnd: '2022-05-29'
+                  units:
+                  - id: adult
+                    quantity: 2
+                  - id: child
+                    quantity: 1
+      description: 'This endpoint is slightly slower as it will return an object for each individual departure time (or day). You have to perform this step to retrieve an `availabilityId` in order to confirm a sale, so if you just want to use this endpoint and skip the calendar endpoint then that''s perfectly ok.
+
+
+        You must pass in one of the following combinations of parameters for this endpoint:
+
+        - `localDate`
+
+        - `localeDateStart` and `localDateEnd`
+
+        - `availabilityIds`'
+components:
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+externalDocs:
+  url: https://docs.octo.travel/
+  description: OCTO Developer Hub
