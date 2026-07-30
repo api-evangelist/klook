@@ -1,0 +1,250 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/klook-octo-openapi-original.json
+description: >-
+  Entity-relationship graph derived from the 22 component schemas in Klook's
+  published OpenAPI. The spec is fully resolved (schemas are inlined rather than
+  $ref-linked), so relationships are derived from id-reference fields and from
+  nested object/array properties. The model is a four-level product hierarchy —
+  Supplier > Product > Option > Unit — against which Availability is queried and
+  a Booking is placed.
+entities:
+- name: Supplier
+  description: The supplier and associated contact details.
+  id_field: id
+  id_format: uuid
+  properties: 4
+  endpoints:
+  - GET /supplier
+- name: Product
+  description: >-
+    A bookable experience. Carries locale, timeZone, delivery formats and
+    methods, redemption method, and its options.
+  id_field: id
+  id_format: uuid
+  properties: 14
+  endpoints:
+  - GET /products
+  - GET /products/{id}
+  key_fields:
+  - internalName
+  - reference
+  - locale
+  - timeZone
+  - allowFreesale
+  - availabilityRequired
+  - availabilityType
+  - deliveryFormats
+  - deliveryMethods
+  - redemptionMethod
+- name: Option
+  description: >-
+    A variant of a product (e.g. "Pick 3"), carrying its own restrictions and
+    unit set.
+  id_field: id
+  id_format: uuid
+  properties: 11
+- name: Unit
+  description: >-
+    A priceable participant type within an option (adult, child, senior), with
+    age and quantity restrictions.
+  id_field: id
+  id_format: slug
+  id_examples:
+  - adult
+  - child
+  - senior
+  properties: 6
+- name: Availability
+  description: >-
+    A bookable slot for a product and option. The `id` returned here is the
+    availabilityId required to create a booking.
+  id_field: id
+  id_format: iso8601-datetime
+  id_example: '2020-01-01T10:30+08:00'
+  properties: 11
+  endpoints:
+  - POST /availability
+- name: AvailabilityCalendar
+  description: >-
+    One object per day, optimized for populating a calendar over a large date
+    range. Deprecated in the documentation.
+  properties: 6
+  endpoints:
+  - POST /availability/calendar
+- name: Booking
+  description: >-
+    A reservation against an availability slot. Moves through ON_HOLD to
+    confirmed; carries the unit items and their tickets.
+  id_field: uuid
+  id_format: uuid
+  secondary_id: id
+  properties: 25
+  endpoints:
+  - POST /bookings
+  - GET /bookings
+  - GET /bookings/{uuid}
+  - PATCH /bookings/{uuid}
+  - POST /bookings/{uuid}/confirm
+  - POST /bookings/{uuid}/cancel
+  - POST /bookings/{uuid}/extend
+- name: UnitItem
+  description: >-
+    A single participant line on a booking, resolving to one unit and carrying
+    its own ticket and contact.
+  id_field: uuid
+  id_format: uuid
+  properties: 9
+- name: Ticket
+  description: The redeemable artifact issued for a booking or unit item.
+  properties: 3
+- name: Contact
+  description: Guest contact details captured on a booking or unit item.
+  properties: 9
+- name: OpeningHours
+  description: Opening-hours window attached to an availability.
+  properties: 2
+- name: UnitRestrictions
+  description: Age, quantity, ID-required and accompaniment rules for a unit.
+  properties: 7
+- name: OptionRestrictions
+  description: Minimum and maximum unit counts for an option.
+  properties: 2
+relationships:
+- from: Supplier
+  to: Product
+  type: has_many
+  via: implicit — all products returned by GET /products belong to the authenticated supplier
+- from: Product
+  to: Option
+  type: has_many
+  via: options
+- from: Option
+  to: Unit
+  type: has_many
+  via: units
+- from: Option
+  to: OptionRestrictions
+  type: has_one
+  via: restrictions
+- from: Unit
+  to: UnitRestrictions
+  type: has_one
+  via: restrictions
+- from: Availability
+  to: Product
+  type: belongs_to
+  via: productId (request parameter)
+- from: Availability
+  to: Option
+  type: belongs_to
+  via: optionId (request parameter)
+- from: Availability
+  to: OpeningHours
+  type: has_many
+  via: openingHours
+- from: Booking
+  to: Product
+  type: belongs_to
+  via: productId
+- from: Booking
+  to: Option
+  type: belongs_to
+  via: optionId
+- from: Booking
+  to: Availability
+  type: belongs_to
+  via: availabilityId
+- from: Booking
+  to: UnitItem
+  type: has_many
+  via: unitItems
+- from: Booking
+  to: Contact
+  type: has_one
+  via: contact
+- from: UnitItem
+  to: Unit
+  type: belongs_to
+  via: unitId
+- from: UnitItem
+  to: Ticket
+  type: has_one
+  via: ticket
+- from: UnitItem
+  to: Contact
+  type: has_one
+  via: contact
+enumerations:
+- name: BookingStatus
+  applies_to: Booking.status
+- name: AvailabilityStatus
+  applies_to: Availability.status
+- name: AvailabilityType
+  applies_to: Product.availabilityType
+  observed_values:
+  - OPENING_HOURS
+- name: DeliveryMethod
+  applies_to: Product.deliveryMethods
+  observed_values:
+  - VOUCHER
+  - TICKET
+- name: DeliveryFormat
+  applies_to: Product.deliveryFormats
+  observed_values:
+  - PDF_URL
+  - QRCODE
+- name: RedemptionMethod
+  applies_to: Product.redemptionMethod
+  observed_values:
+  - DIGITAL
+- name: UnitType
+  applies_to: Unit.type
+  observed_values:
+  - ADULT
+  - CHILD
+- name: ContactField
+  applies_to: Contact field requirements
+- name: DurationUnit
+  applies_to: Duration expressions
+enumeration_note: >-
+  The enum member lists are empty in the published (resolved) OpenAPI —
+  observed_values above are taken verbatim from the example payloads on
+  https://klook.gitbook.io/openapi/capabilities/pricing.md and are therefore
+  illustrative, not the complete enumerations.
+booking_lifecycle:
+  states:
+  - ON_HOLD
+  transitions:
+  - from: (none)
+    to: ON_HOLD
+    via: POST /bookings (Booking Reservation)
+  - from: ON_HOLD
+    to: confirmed
+    via: POST /bookings/{uuid}/confirm
+  - from: ON_HOLD
+    to: ON_HOLD (extended)
+    via: POST /bookings/{uuid}/extend
+  - from: confirmed
+    to: cancelled
+    via: POST /bookings/{uuid}/cancel (only when booking.cancellable is TRUE and within the cancellation cut-off window)
+  - from: ON_HOLD
+    to: expired
+    via: reservation hold elapses without confirmation
+  state_note: >-
+    ON_HOLD is the only status value named in the documentation; the full
+    BookingStatus enumeration is not published in the resolved spec.
+pricing_model:
+  amounts: minor units (integers)
+  fields:
+  - original
+  - retail
+  - net
+  - currency
+  - currencyPrecision
+  detail: >-
+    Prices appear as `pricingFrom` on units at product level and as pricing on
+    availabilities and bookings when the octo/pricing capability is active.
+related:
+  openapi: openapi/klook-octo-openapi-original.json
+  conventions: conventions/klook-conventions.yml

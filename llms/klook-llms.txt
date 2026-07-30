@@ -1,0 +1,21 @@
+# Klook
+
+## openapi
+
+- [Klook API Specification](https://klook.gitbook.io/openapi/readme.md)
+- [Integration Process](https://klook.gitbook.io/openapi/getting-started/integration-process.md)
+- [Glossary of Terms](https://klook.gitbook.io/openapi/getting-started/glossary-of-terms.md)
+- [Errors](https://klook.gitbook.io/openapi/getting-started/errors.md)
+- [Headers](https://klook.gitbook.io/openapi/getting-started/headers.md)
+- [Authentication](https://klook.gitbook.io/openapi/getting-started/authentication.md)
+- [Endpoint & Capabilities](https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md)
+- [Schemas](https://klook.gitbook.io/openapi/getting-started/schemas.md)
+- [Specs Updates](https://klook.gitbook.io/openapi/getting-started/specs-updates.md)
+- [Supplier](https://klook.gitbook.io/openapi/api-core-mandatory/supplier.md): Returns the supplier and associated contact details
+- [Products](https://klook.gitbook.io/openapi/api-core-mandatory/products.md): Fetch the product for the given id or the list of products available to you.
+- [Availability](https://klook.gitbook.io/openapi/api-core-mandatory/availability.md)
+- [Bookings](https://klook.gitbook.io/openapi/api-core-mandatory/bookings.md)
+- [Pricing (Mandatory)](https://klook.gitbook.io/openapi/capabilities/pricing.md): Adds pricing fields to various endpoints
+- [Pickups](https://klook.gitbook.io/openapi/capabilities/pickups.md): Adds hotel pickup functionality to the API
+- [Questions (Coming Soon)](https://klook.gitbook.io/openapi/capabilities/questions.md): Adds the ability to ask custom questions on a booking or unit item
+- [Notifications (Coming Soon)](https://klook.gitbook.io/openapi/capabilities/nofifications.md)

@@ -1,0 +1,199 @@
+generated: '2026-07-19'
+method: searched
+source: >-
+  https://klook.gitbook.io/openapi — the cross-cutting request/response
+  semantics that apply to every endpoint of Klook's Open API (OCTO), harvested
+  from the Getting Started pages and cross-checked against the published
+  OpenAPI.
+description: >-
+  How Klook's Open API behaves across every operation: authentication style,
+  capability negotiation, the two-phase booking reservation model that stands in
+  for idempotency keys, pagination, versioning, error envelope, and localization.
+  These are the runtime-semantics conventions the OpenAPI does not fully express.
+
+base_url: https://{supplier_endpoint}/octo
+base_url_note: >-
+  Supplier-hosted. Klook is the consumer; each supplier provides their own host
+  in the documented form https://{your endpoint name}/octo/{path}.
+api_style: REST over HTTPS, JSON requests and JSON responses
+standard: OCTO 1.0 (Open Connectivity for Tours, Activities and Attractions)
+
+authentication:
+  scheme: HTTP Bearer token (API key) in the Authorization header
+  issued_by: The supplier / system provider integrating to Klook
+  https_required: true
+  docs: https://klook.gitbook.io/openapi/getting-started/authentication.md
+  detail: authentication/klook-authentication.yml
+
+capability_negotiation:
+  supported: true
+  mechanism: Octo-Capabilities request header (required)
+  query_param_fallback: _capabilities
+  detail: >-
+    The caller declares which optional capabilities to activate for a request by
+    listing their IDs, comma separated, in the Octo-Capabilities header. The
+    response echoes the capabilities actually initialized in an Octo-Capabilities
+    response header. A _capabilities query parameter is available for clients
+    that cannot set headers.
+  example_header: 'Octo-Capabilities: octo/content, octo/pricing'
+  example_query: /availability?_capabilities=octo/content,octo/pricing
+  capabilities:
+  - id: octo/pricing
+    name: Pricing
+    status: available
+    mandatory: true
+    description: >-
+      Adds pricing to most endpoints, giving static and dynamic pricing.
+    docs: https://klook.gitbook.io/openapi/capabilities/pricing.md
+  - id: octo/content
+    name: Content
+    status: available
+    description: >-
+      Extends the core product, option and unit schemas with rich content and
+      images.
+  - id: octo/pickups
+    name: Pickups
+    status: coming-soon
+    description: >-
+      Adds hotel pickup options to the booking and lets the guest set which
+      pickup location they want.
+    docs: https://klook.gitbook.io/openapi/capabilities/pickups.md
+  - id: octo/webhooks
+    name: Webhooks
+    status: coming-soon
+    description: >-
+      Programmatically create webhooks to listen for booking or availability
+      updates.
+  - id: notifications
+    name: Notifications
+    status: coming-soon
+    description: >-
+      Subscribe to Product, Availability and Booking change notifications.
+    docs: https://klook.gitbook.io/openapi/capabilities/nofifications.md
+    detail: asyncapi/klook-notifications-webhooks.yml
+  - id: questions
+    name: Questions
+    status: coming-soon
+    description: >-
+      Ask custom questions on a booking or unit item.
+    docs: https://klook.gitbook.io/openapi/capabilities/questions.md
+
+idempotency:
+  supported: false
+  mechanism: null
+  detail: >-
+    Klook's Open API documents NO idempotency key header or parameter. Safe
+    retry is instead handled structurally by a two-phase reservation model: a
+    Booking Reservation (POST /bookings) creates a booking in ON_HOLD status
+    that holds inventory and expires on its own, and a separate Booking
+    Confirmation (POST /bookings/{uuid}/confirm) finalizes it. A reservation
+    that is never confirmed expires rather than becoming a duplicate sale, and a
+    reservation can be extended with POST /bookings/{uuid}/extend. Confirming an
+    expired reservation returns INVALID_BOOKING_UUID.
+  reservation_model:
+    reserve: POST /bookings
+    hold_status: ON_HOLD
+    confirm: POST /bookings/{uuid}/confirm
+    extend: POST /bookings/{uuid}/extend
+    cancel: POST /bookings/{uuid}/cancel
+    expiry: >-
+      The reservation hold expires on its own if Booking Confirmation is not
+      called. The exact TTL is set by the supplier, not fixed by the spec.
+
+pagination:
+  supported: false
+  detail: >-
+    No pagination convention is documented and the published OpenAPI declares no
+    limit/offset/cursor parameters. GET /products returns the full product list;
+    GET /bookings is narrowed with filters rather than paged. Bulk product and
+    availability retrieval is expected to be done on a schedule (Klook syncs
+    inventory and price on a configurable cadence, e.g. every 4 hours for the
+    next 365 days).
+
+filtering:
+  supported: true
+  detail: >-
+    GET /bookings accepts filter parameters to narrow the returned bookings.
+    Availability is queried by POST with a body (product, option, date range)
+    rather than by query string.
+
+field_expansion:
+  supported: false
+  alternative: >-
+    Response richness is controlled by capabilities (octo/content, octo/pricing)
+    rather than by per-request field expansion or sparse fieldsets.
+
+metadata:
+  supported: partial
+  detail: >-
+    Products, options and units each carry a free-text `reference` field the
+    supplier controls, which acts as the caller's own correlation handle. There
+    is no general-purpose key/value metadata object.
+
+request_tracing:
+  request_id_header: null
+  detail: No request-id or correlation header is documented.
+
+versioning:
+  scheme: none-in-transport
+  current: OCTO 1.0
+  detail: >-
+    No version segment appears in the URL path, no version header and no version
+    query parameter. The `/octo/` path segment identifies the standard, not a
+    version. Specification changes are published as a dated table on the Specs
+    Updates page.
+  docs: https://klook.gitbook.io/openapi/getting-started/specs-updates.md
+  detail_artifact: lifecycle/klook-lifecycle.yml
+
+error_envelope:
+  http_status_model: 200 OK on success, 400 Bad Request on failure (403 on bad token)
+  content_type: application/json
+  shape:
+    error: string — the error code
+    errorMessage: string — human readable, localized
+    '<context>': optional attribute echoing the offending id
+  rfc9457: false
+  detail: errors/klook-error-codes.yml
+
+localization:
+  mechanism: Accept-Language request header
+  detail: >-
+    The errorMessage field is translated according to the language provided in
+    the Accept-Language header. Products carry their own `locale` and `timeZone`
+    fields.
+
+rate_limiting:
+  documented: false
+  detail: >-
+    No rate limits, quota headers or 429 responses are documented or declared in
+    the spec. Klook states it continuously monitors API activity for downtime
+    and latency, and that inventory/price sync frequency is configured per
+    connection rather than governed by a published rate limit.
+
+required_headers:
+  request:
+  - name: Authorization
+    required: true
+    value: Bearer {your_API_key}
+  - name: Content-Type
+    required: true
+    value: application/json
+    applies_to: POST, PATCH and DELETE requests
+  - name: Octo-Capabilities
+    required: true
+    value: Comma-separated capability IDs
+  response:
+  - name: Content-Type
+    required: true
+    value: application/json
+  - name: Octo-Capabilities
+    required: true
+    value: Capability IDs initialized with the request
+  docs: https://klook.gitbook.io/openapi/getting-started/headers.md
+
+related:
+  authentication: authentication/klook-authentication.yml
+  errors: errors/klook-error-codes.yml
+  lifecycle: lifecycle/klook-lifecycle.yml
+  data_model: data-model/klook-data-model.yml
+  webhooks: asyncapi/klook-notifications-webhooks.yml

@@ -1,0 +1,76 @@
+generated: '2026-07-19'
+method: searched
+source: https://klook.gitbook.io/openapi/getting-started/specs-updates.md
+description: >-
+  Versioning, change communication and deprecation posture for Klook's Open API.
+  Klook publishes a dated Specs Updates table but no formal versioning policy,
+  no deprecation policy, no Sunset header support, no SLA and no public status
+  page. Because the API is supplier-hosted, uptime is the supplier's
+  responsibility; Klook states it monitors API activity centrally.
+versioning:
+  scheme: none-in-transport
+  current: OCTO 1.0
+  docs: https://klook.gitbook.io/openapi/getting-started/specs-updates.md
+  detail: >-
+    No version segment in the URL path, no version header, no version query
+    parameter. The published OpenAPI declares info.version "1.0". Specification
+    changes are announced as dated rows on the Specs Updates page rather than by
+    minting a new version.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No deprecation policy, no notice period and no RFC 8594 Sunset/Deprecation
+    header support are documented. Removals are communicated only as a row on
+    the Specs Updates table — e.g. "Removal of pricing per booking capability"
+    on 20th Nov 2024, published without a stated notice window.
+deprecated_operations:
+- operation: openapi/klook-octo-openapi-original.json#POST /availability/calendar
+  name: Availability Calendar
+  status: deprecated-in-docs
+  evidence: >-
+    The Availability Calendar heading and its description are struck through on
+    the Availability documentation page, while Availability Check is marked as
+    critical to the booking flow. The operation remains present and undeprecated
+    in the published OpenAPI — the strike-through is the only signal.
+  docs: https://klook.gitbook.io/openapi/api-core-mandatory/availability.md
+deprecated_capabilities:
+- capability: pricing per booking
+  removed: '2024-11-20'
+  evidence: Specs Updates table row "Removal of pricing per booking capability"
+sla:
+  url: null
+  uptime_target: null
+  detail: >-
+    No SLA or uptime commitment is published. Klook states in its API overview
+    that it maintains continuous monitoring of API activity to detect and
+    resolve downtime or latency issues, but publishes no target.
+status_page: null
+status_page_detail: >-
+  No public status page found. status.klook.com does not resolve. Because each
+  supplier hosts their own OCTO endpoint, there is no single Klook-operated API
+  surface for a status page to describe.
+support:
+  onboarding_contact: Klook BD team (assigned during the integration process)
+  docs: https://klook.gitbook.io/openapi/getting-started/integration-process.md
+  detail: >-
+    Integration is a managed, human-in-the-loop onboarding: review specs,
+    confirm development needs, exchange test credentials, Klook configures and
+    tests, supplier provides live credentials, Klook runs live test bookings and
+    verifies vouchers, then go live.
+maturity:
+  core_endpoints: stable
+  capabilities_coming_soon:
+  - octo/pickups
+  - octo/webhooks
+  - notifications
+  - questions
+  detail: >-
+    Four of the documented capabilities are labelled "Coming Soon" in the
+    documentation, including the entire event/notification surface.
+related:
+  changelog: changelog/klook-changelog.yml
+  conventions: conventions/klook-conventions.yml
+  conformance: conformance/klook-conformance.yml

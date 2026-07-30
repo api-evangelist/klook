@@ -1,0 +1,131 @@
+generated: '2026-07-19'
+method: searched
+source: https://klook.gitbook.io/openapi/capabilities/nofifications.md
+docs: https://klook.gitbook.io/openapi/capabilities/nofifications.md
+spec_type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Klook publishes no AsyncAPI document. This is a captured webhook catalog
+  derived verbatim from the documented Notifications capability, not a generated
+  AsyncAPI spec.
+status: coming-soon
+status_note: >-
+  The Notifications capability is labelled "Coming Soon" in Klook's
+  documentation, as is the separate octo/webhooks capability listed on the
+  Endpoints and Capabilities page. The subscription endpoints, event types and
+  payload shapes below are fully documented but should be treated as announced
+  rather than generally available.
+description: >-
+  Klook's event surface is a subscription-based webhook system delivered through
+  the OCTO Notifications capability. Subscribers register a callback URL and a
+  set of notification types; Klook POSTs a thin envelope naming the changed
+  resource, and the subscriber then re-fetches the full object through the core
+  OCTO endpoints with whatever capabilities it wants applied. Payloads
+  deliberately do not carry the serialized resource.
+capability:
+  id: notifications
+  activation_header: 'Octo-Capabilities: notifications'
+subscription_management:
+  base_path: /notifications/subscriptions
+  path_note: >-
+    The Create Subscription operation is documented at
+    "/notifications/subcriptions" (sic — misspelled in Klook's documentation);
+    every other operation uses "/notifications/subscriptions". Recorded verbatim.
+  required_headers:
+  - name: Content-Type
+    value: application/json
+  - name: Authorization
+    value: Bearer <token>
+  - name: Octo-Capabilities
+    value: notifications
+  operations:
+  - name: Create Subscription
+    method: POST
+    path: /notifications/subcriptions
+    request_fields:
+    - name: url
+      type: string
+      description: The URL where notifications should be sent.
+    - name: notificationTypes
+      type: array
+      description: The notification types to subscribe to.
+    - name: headers
+      type: object
+      description: >-
+        HTTP headers to include on the delivered request, e.g. for
+        authenticating the callback.
+    response_fields:
+    - id
+    - notificationTypes
+    - url
+    - headers
+  - name: Update Subscription
+    method: PATCH
+    path: /notifications/subscriptions/{id}
+  - name: Delete Subscription
+    method: DELETE
+    path: /notifications/subscriptions/{id}
+  - name: Get Subscription
+    method: GET
+    path: /notifications/subscriptions/{id}
+  - name: List Subscriptions
+    method: GET
+    path: /notifications/subscriptions
+    auth: Bearer token
+events:
+- type: PRODUCT_UPDATE
+  description: >-
+    Changes to a product object, including any option, ticket or other nested
+    entity within it.
+  payload_data_fields:
+  - productId
+  refetch_with: GET /products/{id}
+  example:
+    id: 503eac5-bfab-4465-aad1-fc023b23cdc6
+    subscriptionId: 5c7d6dbb-cd4c-48fd-9709-0ebaa14d7a00
+    notificationType: PRODUCT_UPDATE
+    utcCreatedAt: '2024-05-07T15:47:32Z'
+    data:
+      productId: ff53a321-a07b-4428-b8b3-086c94fb4147
+- type: AVAILABILITY_UPDATE
+  description: Changes to availabilities.
+  refetch_with: POST /availability/calendar
+- type: BOOKING_UPDATE
+  description: Changes to bookings.
+  refetch_with: GET /bookings/{uuid}
+delivery:
+  transport: HTTP
+  method: POST
+  envelope:
+    subscriptionId: The id of the subscription that produced this notification.
+    notificationType: One of PRODUCT_UPDATE, AVAILABILITY_UPDATE, BOOKING_UPDATE.
+    data: Object carrying only the identifiers needed to re-fetch the resource.
+  envelope_example:
+    subscriptionId: 5c7d6dbb-cd4c-48fd-9709-0ebaa14d7a00
+    notificationType: PRODUCT_UPDATE
+    data: {}
+  design_rationale: >-
+    "The request body will not include the fully serialized object... Instead
+    it'll simply provide you with the parameters needed to fetch that updated
+    resource if you choose to. This is to reduce the volume of data sent in the
+    request and allow the receiver of the notification to choose which
+    capabilities they want to include when fetching the updated resource."
+security:
+  callback_auth: >-
+    Subscriber-defined. The `headers` object on the subscription lets the
+    subscriber specify arbitrary headers (the documented example uses an
+    "Api-Key" header) that Klook will include when delivering the notification.
+  signature_verification: not documented
+  replay_protection: >-
+    Not documented. The envelope carries utcCreatedAt and a per-notification id,
+    which could support deduplication.
+gaps:
+- No AsyncAPI document published.
+- No signing secret or signature header documented for verifying deliveries.
+- No documented retry policy, backoff or delivery guarantee.
+- No documented expected response status from the subscriber endpoint.
+- No dead-letter or failed-delivery inspection surface.
+related:
+  conventions: conventions/klook-conventions.yml
+  data_model: data-model/klook-data-model.yml
+  openapi: openapi/klook-octo-openapi-original.json

@@ -1,0 +1,48 @@
+generated: '2026-07-19'
+method: searched
+source: https://klook.gitbook.io/openapi/getting-started/specs-updates.md
+docs: https://klook.gitbook.io/openapi/getting-started/specs-updates.md
+description: >-
+  Klook publishes specification changes as a dated "Specs Updates" table in its
+  API documentation. It is a change log rather than a release log: entries carry
+  a date and a one-line description, with no version number, no notice period
+  and no breaking/non-breaking classification. The linked notes resolve to
+  GitBook change-request URLs that require authentication.
+scheme: dated-table
+versioned: false
+current_version: OCTO 1.0
+entry_count: 2
+window: 2024-11-20 to 2025-02-03
+entries:
+- date: '2025-02-03'
+  date_published: 3rd Feb 2025
+  description: Add Pickups Capability
+  type: addition
+  breaking: false
+  detail: >-
+    Introduced the octo/pickups capability, adding hotel pickup functionality to
+    the API. The capability is still labelled "Coming Soon" in the current
+    documentation.
+  notes_url: >-
+    https://app.gitbook.com/o/Rk4WszGEbOHT20dJQ6RO/s/F8xpmnLvijHXFmAy6fZh/~/changes/43/api-core-mandatory/products
+  notes_url_access: authenticated
+- date: '2024-11-20'
+  date_published: 20th Nov 2024
+  description: Removal of pricing per booking capability
+  type: removal
+  breaking: true
+  detail: >-
+    Removed the pricing-per-booking capability. No notice period or migration
+    path is stated in the table.
+  notes_url: >-
+    https://app.gitbook.com/o/Rk4WszGEbOHT20dJQ6RO/s/F8xpmnLvijHXFmAy6fZh/~/changes/39/capabilities/pricing
+  notes_url_access: authenticated
+gaps:
+- No version numbers attached to entries.
+- No RSS/Atom feed or machine-readable changelog.
+- >-
+  The table has not been updated since February 2025 as observed on 2026-07-19,
+  despite capabilities still being listed as "Coming Soon".
+- Linked change notes are private GitBook URLs, not public diffs.
+related:
+  lifecycle: lifecycle/klook-lifecycle.yml

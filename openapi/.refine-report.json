@@ -1,0 +1,20 @@
+{
+  "provider": "klook",
+  "sources": [
+    "klook-availability-api-openapi.yml",
+    "klook-bookings-api-openapi.yml",
+    "klook-products-api-openapi.yml",
+    "klook-supplier-api-openapi.yml"
+  ],
+  "outputs": [
+    "klook-availability-api-openapi.yml",
+    "klook-bookings-api-openapi.yml",
+    "klook-products-api-openapi.yml",
+    "klook-supplier-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

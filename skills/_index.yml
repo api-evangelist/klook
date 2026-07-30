@@ -1,0 +1,50 @@
+generated: '2026-07-19'
+method: generated
+source: >-
+  Packaged Agent Skills generated from Klook's published OpenAPI
+  (openapi/klook-octo-openapi-original.json) and documentation
+  (https://klook.gitbook.io/openapi). Every operationId cited in a skill is
+  verified verbatim in the spec; the five operations the published spec leaves
+  without an operationId are referenced by method and path. Cross-cutting rules
+  cite ../conventions/, ../errors/, ../authentication/ and ../data-model/.
+description: >-
+  Three skills covering the marquee flows of Klook's supplier-hosted OCTO API:
+  the two-phase booking flow, the catalog and pricing sync, and post-sale
+  cancellation and amendment.
+skills:
+- file: klook-reserve-and-confirm-booking.md
+  name: Reserve and confirm a Klook booking
+  api: openapi/klook-octo-openapi-original.json
+  operations:
+  - GET /products
+  - POST /availability
+  - post-bookings
+  - post-bookings-uuid-extend
+  - post-bookings-uuid-confirm
+  - get-bookings-:uuid
+- file: klook-sync-product-catalog.md
+  name: Sync a Klook supplier product catalog and pricing
+  api: openapi/klook-octo-openapi-original.json
+  operations:
+  - GET /supplier
+  - GET /products
+  - GET /products/{id}
+  - POST /availability/calendar
+  - POST /availability
+- file: klook-cancel-and-amend-booking.md
+  name: Cancel or amend a Klook booking
+  api: openapi/klook-octo-openapi-original.json
+  operations:
+  - get-bookings-:uuid
+  - get-bookings
+  - patch-bookings-:uuid
+  - delete-bookings-:uuid
+provider_published_skills:
+  found: false
+  checked:
+  - https://klook.gitbook.io/openapi
+  - https://klook.gitbook.io/openapi/llms.txt
+  - github.com/klook
+  note: >-
+    Klook publishes no AGENTS.md or skill files. It does publish an llms.txt
+    documentation index, captured verbatim at llms/klook-llms.txt.

@@ -1,0 +1,118 @@
+generated: '2026-07-19'
+method: searched
+source: >-
+  https://klook.gitbook.io/openapi — Klook explicitly publishes its Open API as
+  an implementation of the OCTO standard; the remaining assertions are derived
+  from openapi/klook-octo-openapi-original.json.
+description: >-
+  Which industry and cross-cutting standards Klook's Open API conforms to. The
+  headline finding is that Klook did not invent a proprietary contract: it
+  adopted OCTO, the open standard for the in-destination experiences sector,
+  and ships the OCTO 1.0 OpenAPI document itself as its reference.
+standards:
+- id: octo-1.0
+  name: OCTO — Open Connectivity for Tours, Activities and Attractions
+  conforms: true
+  evidence: >-
+    Klook's documentation is titled "Klook API Specification" and states "OCTO
+    uses Bearer authentication"; endpoints are served under the /octo/ path
+    prefix; the Core Endpoints are the OCTO Supplier/Products/Availability/
+    Bookings set; optional behaviour is negotiated with the OCTO-defined
+    Octo-Capabilities header using octo/* capability IDs. The schema reference
+    published by Klook is the OCTO API Specification 1.0 OpenAPI document,
+    authored by OCTO Standards NP Inc.
+  spec_url: https://app.swaggerhub.com/apis-docs/OCTO-API/OCTO-API/1.0
+  docs: https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md
+- id: openapi-3.1
+  name: OpenAPI Specification 3.1.0
+  conforms: true
+  evidence: >-
+    openapi/klook-octo-openapi-original.json declares "openapi": "3.1.0" with 12
+    operations across 10 paths and 22 component schemas.
+- id: rfc6750-bearer-token
+  name: OAuth 2.0 Bearer Token Usage
+  conforms: partial
+  evidence: >-
+    Credentials are transported as an HTTP Bearer token in the Authorization
+    header (securityScheme type http, scheme bearer), which follows the RFC 6750
+    transport convention. The token is a static API key, not an OAuth 2.0 access
+    token — there is no authorization server, token endpoint or expiry.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme, no authorization or token endpoints, no scopes.
+    Authentication is a supplier-issued static API key.
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: No openIdConnect securityScheme and no discovery document published.
+- id: rfc9457-problem-details
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors use a custom {error, errorMessage} JSON envelope with
+    application/json, not application/problem+json. No type/title/status/detail/
+    instance members.
+- id: rfc9110-http-semantics
+  name: HTTP semantics — meaningful status codes
+  conforms: partial
+  evidence: >-
+    The specification deliberately narrows to 200 OK and 400 Bad Request for
+    nearly all outcomes, carrying the real discriminator in the body. 403 is
+    documented for an invalid token. Conditions that would conventionally map to
+    401, 404, 409, 422 and 5xx are all collapsed into 400 with an error code.
+- id: idempotency-key
+  name: Idempotency-Key header (draft-ietf-httpapi-idempotency-key-header)
+  conforms: false
+  evidence: >-
+    No idempotency key header or parameter is documented or declared. Safe retry
+    is handled structurally by the two-phase ON_HOLD reservation / confirmation
+    model instead.
+- id: pagination
+  name: Documented pagination convention
+  conforms: false
+  evidence: >-
+    No limit/offset/cursor parameters in the spec and no pagination convention
+    in the docs.
+- id: rfc8594-sunset-header
+  name: RFC 8594 Sunset HTTP Header
+  conforms: false
+  evidence: No Sunset or Deprecation header support is documented.
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: >-
+    An event surface is documented (Notifications capability, three event types)
+    but no AsyncAPI document is published. Captured as a webhook catalog in
+    asyncapi/klook-notifications-webhooks.yml.
+- id: iso8601
+  name: ISO 8601 date and time
+  conforms: true
+  evidence: >-
+    availabilityId, localDateTimeStart/End and utcCreatedAt values are ISO 8601
+    timestamps with offsets, e.g. "2020-01-01T10:30+08:00".
+- id: rfc4122-uuid
+  name: RFC 4122 UUID identifiers
+  conforms: true
+  evidence: >-
+    Product, option, booking and subscription identifiers are UUIDs, e.g.
+    booking uuid "5c7d6dbb-cd4c-48fd-9709-0ebaa14d7a00". Unit ids are
+    human-readable slugs (adult, child) rather than UUIDs.
+- id: iso4217-currency
+  name: ISO 4217 currency codes
+  conforms: true
+  evidence: >-
+    Pricing objects carry `currency` ISO 4217 codes with an explicit
+    `currencyPrecision`, and amounts are expressed in minor units.
+compliance_program:
+  published: false
+  note: >-
+    No trust center, certification list (SOC 2 / ISO 27001 / PCI DSS) or
+    compliance page was found on klook.com during this pass, so no Compliance
+    pointer is emitted. See security/klook-domain-security.yml for the probed
+    posture.
+related:
+  openapi: openapi/klook-octo-openapi-original.json
+  conventions: conventions/klook-conventions.yml
+  errors: errors/klook-error-codes.yml

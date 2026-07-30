@@ -1,0 +1,58 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/klook-octo-openapi-original.json
+format: custom
+format_note: >-
+  NOT rfc9457. The spec declares no application/problem+json media type; all
+  error responses are application/json carrying the OCTO {error, errorMessage}
+  envelope documented in errors/klook-error-codes.yml.
+description: >-
+  Error responses derived from the 4xx/5xx responses declared in Klook's
+  published OpenAPI. The spec declares only a single 400 response per operation
+  and nine of twelve operations declare it; the three read-only core endpoints
+  (GET /supplier, GET /products, GET /products/{id}) declare no error response
+  at all, which is a spec gap rather than an absence of errors.
+problems:
+- status: 400
+  title: Bad Request
+  description: >-
+    Example response — the OCTO error envelope with `error` and `errorMessage`.
+  media_type: application/json
+  source_operations:
+  - openapi/klook-octo-openapi-original.json#POST /availability/calendar
+  - openapi/klook-octo-openapi-original.json#POST /availability
+  - openapi/klook-octo-openapi-original.json#post-bookings
+  - openapi/klook-octo-openapi-original.json#get-bookings
+  - openapi/klook-octo-openapi-original.json#post-bookings-uuid-confirm
+  - openapi/klook-octo-openapi-original.json#delete-bookings-:uuid
+  - openapi/klook-octo-openapi-original.json#get-bookings-:uuid
+  - openapi/klook-octo-openapi-original.json#patch-bookings-:uuid
+  - openapi/klook-octo-openapi-original.json#post-bookings-uuid-extend
+  error_codes:
+  - INVALID_PRODUCT_ID
+  - INVALID_OPTION_ID
+  - INVALID_UNIT_ID
+  - INVALID_AVAILABILITY_ID
+  - INVALID_BOOKING_UUID
+  - BAD_REQUEST
+  - UNPROCESSABLE_ENTITY
+- status: 403
+  title: Forbidden
+  description: >-
+    Documented in prose but NOT declared in the OpenAPI. Returned when the token
+    is invalid or has been deactivated by the supplier.
+  media_type: application/json
+  source: https://klook.gitbook.io/openapi/getting-started/authentication.md
+  error_codes:
+  - FORBIDDEN
+  - UNAUTHORIZED
+gaps:
+- >-
+  GET /supplier, GET /products and GET /products/{id} declare no 4xx response in
+  the OpenAPI.
+- >-
+  No 401, 403, 429 or 5xx responses are declared anywhere in the spec, though
+  UNAUTHORIZED, FORBIDDEN and INTERNAL_SERVER_ERROR are documented error codes.
+related:
+  error_codes: errors/klook-error-codes.yml
+  overlay: overlays/klook-octo-overlay.yaml

@@ -1,0 +1,86 @@
+generated: '2026-07-19'
+method: searched
+source: >-
+  npm registry search, PyPI, and https://klook.gitbook.io/openapi — searched
+  2026-07-19.
+description: >-
+  Klook publishes NO first-party client libraries for its Open API. This is
+  consistent with the integration model: the supplier implements the OCTO
+  endpoints and Klook is the calling client, so there is no Klook-side SDK for a
+  partner to install. Partners implement the OCTO server contract themselves,
+  typically inside an existing reservation system or channel manager. The
+  packages below were found on public registries and are all third-party.
+official_sdk_count: 0
+official_sdks_published: false
+packages:
+- language: javascript
+  registry: npm
+  name: klook
+  url: https://www.npmjs.com/package/klook
+  install: npm install klook
+  description: A client for Klook API. Built with TypeScript.
+  publisher: oncloud
+  official: false
+  note: >-
+    Third-party. Not published by Klook and not referenced from Klook's
+    documentation.
+- language: javascript
+  registry: npm
+  name: n8n-nodes-klook-activity-price-tracker
+  url: https://www.npmjs.com/package/n8n-nodes-klook-activity-price-tracker
+  install: npm install n8n-nodes-klook-activity-price-tracker
+  description: >-
+    Track prices for Klook tours, attractions, tickets and experiences. An n8n
+    community node.
+  publisher: vitbond
+  official: false
+- language: javascript
+  registry: npm
+  name: klook-web-uikit
+  url: https://www.npmjs.com/package/klook-web-uikit
+  install: npm install klook-web-uikit
+  description: A component library for Vue.js.
+  publisher: brian175
+  official: false
+  note: >-
+    A front-end component library carrying the Klook name; unrelated to the Open
+    API and not referenced from Klook's documentation.
+- language: javascript
+  registry: npm
+  name: vue-cli-plugin-klkspa
+  url: https://www.npmjs.com/package/vue-cli-plugin-klkspa
+  install: npm install vue-cli-plugin-klkspa
+  description: Vue CLI 3 plugin for klook spa.
+  publisher: wizardpisces
+  official: false
+ecosystem_packages:
+- language: javascript
+  registry: npm
+  name: '@octocloud/types'
+  url: https://www.npmjs.com/package/@octocloud/types
+  install: npm install @octocloud/types
+  description: TypeScript types for the OCTO standard.
+  official: false
+  note: >-
+    Not a Klook package. Relevant because Klook's Open API IS the OCTO
+    specification — OCTO ecosystem typings are the closest thing to a usable
+    client-side contract for implementers.
+registries_checked:
+- registry: npm
+  query: klook
+  first_party_found: false
+- registry: PyPI
+  queries:
+  - klook
+  - klook-api
+  first_party_found: false
+  note: Both return 404.
+- registry: GitHub
+  target: github.com/klook
+  first_party_found: false
+  note: >-
+    A personal account with zero public repositories, not an official Klook
+    organization. No official Klook GitHub org was found.
+related:
+  openapi: openapi/klook-octo-openapi-original.json
+  conformance: conformance/klook-conformance.yml

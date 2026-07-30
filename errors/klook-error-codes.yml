@@ -1,0 +1,107 @@
+generated: '2026-07-19'
+method: searched
+source: https://klook.gitbook.io/openapi/getting-started/errors.md
+docs: https://klook.gitbook.io/openapi/getting-started/errors.md
+format: custom
+description: >-
+  Klook's Open API (OCTO) uses a deliberately narrow HTTP status model: every
+  request returns either 200 OK or 400 Bad Request, with the real error
+  discriminator carried in the `error` field of the JSON body. This is NOT
+  RFC 9457 problem+json — the envelope is a bare JSON object with `error` and
+  `errorMessage`, plus optional context attributes naming the offending
+  identifier.
+envelope:
+  content_type: application/json
+  http_status_model: >-
+    200 OK on success, 400 Bad Request on any failure. The docs note 403
+    Forbidden for an invalid or deactivated token.
+  fields:
+  - name: error
+    required: true
+    description: The error code. See error_codes[] below.
+  - name: errorMessage
+    required: true
+    description: >-
+      A human readable error message, translated according to the language
+      provided in the Accept-Language request header.
+  - name: <context attribute>
+    required: false
+    description: >-
+      Optional additional field echoing the offending value, e.g. productId,
+      optionId, unitId, availabilityId. Present only for the codes listed below.
+  example:
+    error: INVALID_PRODUCT_ID
+    errorMessage: The Product ID was invalid or missing
+    productId: '123'
+error_codes:
+- code: INVALID_PRODUCT_ID
+  description: Missing or invalid productId in the request
+  context_attribute: productId
+  example:
+    error: INVALID_PRODUCT_ID
+    errorMessage: The Product ID was invalid or missing
+    productId: '123'
+- code: INVALID_OPTION_ID
+  description: Missing or invalid optionId in the request
+  context_attribute: optionId
+  example:
+    error: INVALID_OPTION_ID
+    errorMessage: The Option ID was invalid or missing
+    optionId: '321'
+- code: INVALID_UNIT_ID
+  description: Missing or invalid unitId in the request
+  context_attribute: unitId
+  example:
+    error: INVALID_UNIT_ID
+    errorMessage: The Unit ID was invalid or missing
+    unitId: senior-123678
+- code: INVALID_AVAILABILITY_ID
+  description: Missing or invalid availabilityId in the request
+  context_attribute: availabilityId
+  example:
+    error: INVALID_AVAILABILITY_ID
+    errorMessage: The Availability ID was invalid or missing
+    availabilityId: '2020-01-01T10:30+08:00'
+- code: INVALID_BOOKING_UUID
+  description: >-
+    Missing or invalid booking uuid; or, when confirming a booking, the booking
+    reservation may have already expired.
+  context_attribute: null
+- code: BAD_REQUEST
+  description: >-
+    The request body is not formatted correctly, has missing required fields, or
+    one or more data types are incorrect.
+  context_attribute: null
+- code: UNPROCESSABLE_ENTITY
+  description: >-
+    The request body is technically correct but cannot be processed for other
+    reasons — e.g. cancelling a booking after the cancellation cutoff has
+    elapsed, or no inventory available to reserve during Booking Reservation.
+  context_attribute: productId
+  example:
+    error: UNPROCESSABLE_ENTITY
+    errorMessage: Activity inventory not available
+    productId: '123'
+  remediation: >-
+    On Booking Reservation this is the documented response when there is no
+    inventory or the slot cannot be reserved. Re-run Availability Check to get a
+    fresh availabilityId before retrying.
+- code: INTERNAL_SERVER_ERROR
+  description: The backend server is down or there is a network outage.
+  context_attribute: null
+- code: UNAUTHORIZED
+  description: >-
+    No API key was sent in the Authorization header to an endpoint that requires
+    authentication.
+  context_attribute: null
+- code: FORBIDDEN
+  description: >-
+    The API key sent was invalid or has been revoked by the backend system, or
+    the caller is trying to access an endpoint/resource they do not have access
+    to.
+  context_attribute: null
+  http_status: 403
+related:
+  problem_types: errors/klook-problem-types.yml
+  conventions: conventions/klook-conventions.yml
+  authentication: authentication/klook-authentication.yml

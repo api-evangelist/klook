@@ -1,0 +1,34 @@
+generated: '2026-07-19'
+method: searched
+source: Live HTTP probes of the Klook web and documentation hosts, 2026-07-19.
+description: >-
+  Klook publishes no /.well-known/ discovery documents. Every probed path
+  returns 404 on both the main site and the documentation host. Recorded as a
+  negative result — this is valid, expected data, not a failure.
+documents_found: 0
+hosts:
+- host: https://www.klook.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /security.txt
+    status: 404
+- host: https://klook.gitbook.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+notes: >-
+  No API host of Klook's own could be probed: the Open API is supplier-hosted,
+  and api.klook.com, open.klook.com and developer.klook.com do not resolve.
+  Consequently no WellKnown, SecurityTxt or APICatalog artifact exists to
+  point at, and none is claimed.
+related:
+  domain_security: security/klook-domain-security.yml

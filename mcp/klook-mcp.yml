@@ -1,0 +1,110 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/klook-octo-openapi-original.json
+status: candidate
+description: >-
+  No official or hosted Klook MCP server was found during this pass (searched
+  Klook's documentation, the MCP registry namespace and npm). This is a
+  candidate tool surface derived one-tool-per-operation from Klook's published
+  OpenAPI, for anyone building an MCP server in front of a supplier's OCTO
+  endpoint. It is a proposal, not a Klook product.
+searched:
+  official_server_found: false
+  checked:
+  - https://klook.gitbook.io/openapi
+  - npm registry (query "klook")
+  - github.com/klook (personal account, no public repositories)
+server:
+  name: klook-octo
+  transport: stdio
+  url: null
+  auth:
+    type: bearer
+    detail: >-
+      Supplier-issued API key passed as Authorization: Bearer. Each MCP server
+      instance binds to exactly one supplier endpoint, since the OCTO API is
+      supplier-hosted.
+  required_config:
+  - name: KLOOK_OCTO_ENDPOINT
+    description: The supplier's base URL, e.g. https://supplier.example.com/octo
+  - name: KLOOK_OCTO_API_KEY
+    description: The supplier-issued API key.
+  - name: KLOOK_OCTO_CAPABILITIES
+    description: >-
+      Comma-separated capability IDs sent in the Octo-Capabilities header, e.g.
+      "octo/pricing,octo/content".
+tools:
+- name: get_supplier
+  description: Get the supplier and associated contact details.
+  read_only: true
+  source_operation: openapi/klook-octo-openapi-original.json#GET /supplier
+- name: list_products
+  description: List all products available to the caller.
+  read_only: true
+  source_operation: openapi/klook-octo-openapi-original.json#GET /products
+- name: get_product
+  description: Get a single product and its options and units by product id.
+  read_only: true
+  source_operation: openapi/klook-octo-openapi-original.json#GET /products/{id}
+- name: check_availability
+  description: >-
+    Check availability for a product and option, returning one object per start
+    time. Required to obtain the availabilityId needed to create a booking.
+  read_only: true
+  source_operation: openapi/klook-octo-openapi-original.json#POST /availability
+- name: get_availability_calendar
+  description: >-
+    Get availability as one object per day over a date range. Deprecated in
+    Klook's documentation — prefer check_availability.
+  read_only: true
+  deprecated: true
+  source_operation: openapi/klook-octo-openapi-original.json#POST /availability/calendar
+- name: reserve_booking
+  description: >-
+    Create a booking that reserves availability in ON_HOLD status. Must be
+    confirmed before the hold expires. Consequential — holds real inventory.
+  read_only: false
+  source_operation: openapi/klook-octo-openapi-original.json#post-bookings
+- name: confirm_booking
+  description: >-
+    Confirm a previously reserved booking, finalizing the sale. Consequential —
+    completes a purchase.
+  read_only: false
+  source_operation: openapi/klook-octo-openapi-original.json#post-bookings-uuid-confirm
+- name: extend_booking_reservation
+  description: Extend the hold on an ON_HOLD booking reservation.
+  read_only: false
+  source_operation: openapi/klook-octo-openapi-original.json#post-bookings-uuid-extend
+- name: cancel_booking
+  description: >-
+    Cancel a booking. Only permitted when booking.cancellable is TRUE and within
+    the cancellation cut-off window. Consequential — reverses a sale.
+  read_only: false
+  source_operation: openapi/klook-octo-openapi-original.json#delete-bookings-:uuid
+- name: update_booking
+  description: Update an existing booking.
+  read_only: false
+  source_operation: openapi/klook-octo-openapi-original.json#patch-bookings-:uuid
+- name: get_booking
+  description: Get the status and details of an existing booking by uuid.
+  read_only: true
+  source_operation: openapi/klook-octo-openapi-original.json#get-bookings-:uuid
+- name: list_bookings
+  description: List bookings matching the given filters.
+  read_only: true
+  source_operation: openapi/klook-octo-openapi-original.json#get-bookings
+agent_guidance:
+  ordering: >-
+    check_availability must run before reserve_booking — the availabilityId it
+    returns is the only valid input to a reservation.
+  no_idempotency: >-
+    The API defines no idempotency key. A failed reserve_booking must not be
+    blindly retried; re-run check_availability first, and list_bookings to
+    confirm whether a reservation already landed.
+  human_in_the_loop: >-
+    reserve_booking, confirm_booking and cancel_booking move real money and real
+    inventory. Gate them behind explicit user confirmation.
+related:
+  skills: skills/_index.yml
+  conventions: conventions/klook-conventions.yml
+  errors: errors/klook-error-codes.yml

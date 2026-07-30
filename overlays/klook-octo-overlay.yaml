@@ -1,0 +1,148 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Klook Open API (OCTO)
+  version: 1.0.0
+extends: openapi/klook-octo-openapi-original.json
+x-generated: '2026-07-19'
+x-method: generated
+x-source: >-
+  Enhancements derived from https://klook.gitbook.io/openapi and the repo
+  artifacts. Applies API Evangelist metadata, adds the operationIds the
+  published spec omits on five operations, applies the bearer security scheme
+  uniformly (the prose documentation requires authentication on every endpoint
+  while the spec applies it to only three), documents the required
+  Octo-Capabilities header, replaces the placeholder server, and marks the
+  documentation-deprecated Availability Calendar operation. The original spec is
+  never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: klook
+    x-apievangelist-artifacts: https://github.com/api-evangelist/klook
+    x-apievangelist-standard: OCTO 1.0
+    x-apievangelist-docs: https://klook.gitbook.io/openapi
+    x-apievangelist-note: >-
+      Published by OCTO Standards NP Inc and distributed by Klook as its Open
+      API contract. Supplier-implemented: Klook is the API consumer.
+
+- target: $.servers
+  update:
+  - url: https://{supplier_endpoint}/octo
+    description: >-
+      Supplier-hosted OCTO endpoint. Each supplier provides Klook with their own
+      host during onboarding, in the documented form
+      https://{your endpoint name}/octo/{path}.
+    variables:
+      supplier_endpoint:
+        default: api.example.com
+        description: The supplier's own API hostname.
+
+- target: $
+  update:
+    security:
+    - Auth: []
+
+- target: $.components.securitySchemes.Auth
+  update:
+    description: >-
+      Supplier-issued API key presented as an HTTP Bearer token. Required on all
+      endpoints per https://klook.gitbook.io/openapi/getting-started/authentication.md.
+      Use a single unique API key per reseller-supplier relationship.
+
+- target: $.paths['/supplier'].get
+  update:
+    operationId: getSupplier
+    tags:
+    - Supplier
+    description: >-
+      Returns a single Supplier and associated contact details for the
+      authenticated API key.
+
+- target: $.paths['/products'].get
+  update:
+    operationId: getProducts
+    description: >-
+      Returns the list of Products available to the caller. No pagination is
+      defined; Klook syncs the full catalog on a configurable cadence.
+
+- target: $.paths['/products/{id}'].get
+  update:
+    operationId: getProduct
+    description: Returns a single Product and associated details for a given Product ID.
+
+- target: $.paths['/availability'].post
+  update:
+    operationId: checkAvailability
+    description: >-
+      Returns availability for a given Product and Option as one object per
+      start time (or day). Critical to the booking flow — this is the only way
+      to obtain the availabilityId required by Booking Reservation.
+
+- target: $.paths['/availability/calendar'].post
+  update:
+    operationId: getAvailabilityCalendar
+    deprecated: true
+    description: >-
+      DEPRECATED. Struck through in Klook's documentation. Returns availability
+      as a single object per day, optimized for large date ranges and calendar
+      population. Use POST /availability (Availability Check) instead — it is
+      the only operation that returns an availabilityId.
+
+- target: $.paths['/bookings'].post
+  update:
+    x-apievangelist-flow: >-
+      Phase 1 of the two-phase booking model. Creates a booking in ON_HOLD
+      status that reserves inventory while payment and contact details are
+      collected. Must be followed by POST /bookings/{uuid}/confirm before the
+      hold expires, or extended with POST /bookings/{uuid}/extend.
+    x-apievangelist-idempotency: >-
+      No idempotency key is defined. Retry safety comes from the expiring
+      ON_HOLD reservation rather than from request deduplication.
+
+- target: $.paths['/bookings/{uuid}/confirm'].post
+  update:
+    x-apievangelist-flow: >-
+      Phase 2 of the two-phase booking model. Finalizes a previously reserved
+      booking. Returns INVALID_BOOKING_UUID if the reservation has already
+      expired.
+
+- target: $.paths['/bookings/{uuid}/cancel'].post
+  update:
+    x-apievangelist-precondition: >-
+      Only permitted when booking.cancellable is TRUE and the request is within
+      the booking cancellation cut-off window. Otherwise returns
+      UNPROCESSABLE_ENTITY.
+    x-apievangelist-operationid-note: >-
+      The published spec names this operation "delete-bookings-:uuid" even
+      though it is a POST to /bookings/{uuid}/cancel. Left unchanged to preserve
+      referential integrity with the original document.
+
+- target: $.components
+  update:
+    x-apievangelist-error-envelope:
+      description: >-
+        All error responses use the OCTO envelope, not RFC 9457 problem+json.
+      content_type: application/json
+      shape:
+        error: string — machine-readable error code
+        errorMessage: string — human readable, localized via Accept-Language
+      codes:
+      - INVALID_PRODUCT_ID
+      - INVALID_OPTION_ID
+      - INVALID_UNIT_ID
+      - INVALID_AVAILABILITY_ID
+      - INVALID_BOOKING_UUID
+      - BAD_REQUEST
+      - UNPROCESSABLE_ENTITY
+      - INTERNAL_SERVER_ERROR
+      - UNAUTHORIZED
+      - FORBIDDEN
+      catalog: errors/klook-error-codes.yml
+    x-apievangelist-required-headers:
+      Octo-Capabilities: >-
+        Required on every request. Comma-separated list of capability IDs to
+        activate, e.g. "octo/content, octo/pricing". A _capabilities query
+        parameter is available as a fallback. Echoed back on the response.
+      Content-Type: application/json on POST, PATCH and DELETE.
+      Accept-Language: Selects the language of errorMessage.
+      catalog: conventions/klook-conventions.yml
