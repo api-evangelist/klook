@@ -1,8 +1,31 @@
 aid: klook
 name: Klook
-description: 'Klook is a company surfaced as a portfolio company of bessemer-venture-partners, hongshan,
-  softbank-vision-fund and added to the API Evangelist network as a stub for enrichment. Sector: marketplaces.
-  This profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  Klook is a Hong Kong-headquartered travel and experiences booking platform for
+  the "things to do" sector — attractions, tours and activities, theme parks,
+  food and beverage, WiFi and SIM cards, and transportation passes. Klook
+  publishes an Open API specification for merchants, suppliers, reservation
+  systems and channel managers who want to distribute their inventory through
+  Klook's website, app and partner channels. The specification is an
+  implementation of OCTO (Open Connectivity for Tours, Activities and
+  Attractions), the open standard for the in-destination experiences industry:
+  the supplier implements the OCTO core endpoints (Supplier, Products,
+  Availability, Bookings) at their own host and Klook consumes them as the
+  reseller, with optional Capabilities negotiated through the Octo-Capabilities
+  header. Klook additionally runs an affiliate program and a merchant portal.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://res.klook.com/image/upload/klook_logo.png
 url: https://raw.githubusercontent.com/api-evangelist/klook/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,15 +33,102 @@ x-backed-by:
 - bessemer-venture-partners
 - hongshan
 - softbank-vision-fund
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: openapi-and-docs-harvested
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
 - Marketplaces
-apis: []
+- Travel
+- Tours and Activities
+- Booking
+- Experiences
+- Distribution
+- OCTO
+- Hospitality
+apis:
+- aid: klook:klook-availability-api
+  name: Klook Availability API
+  description: The Availability API from Klook — 2 operation(s) for availability.
+  humanURL: https://klook.gitbook.io/openapi
+  baseURL: https://{supplier_endpoint}/octo
+  tags:
+  - Availability
+  properties:
+  - type: OpenAPI
+    url: openapi/klook-availability-api-openapi.yml
+  - type: Documentation
+    url: https://klook.gitbook.io/openapi
+  - type: APIReference
+    url: https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md
+  - type: GettingStarted
+    url: https://klook.gitbook.io/openapi/getting-started/integration-process.md
+  - type: Authentication
+    url: https://klook.gitbook.io/openapi/getting-started/authentication.md
+  - type: ErrorCodes
+    url: https://klook.gitbook.io/openapi/getting-started/errors.md
+- aid: klook:klook-bookings-api
+  name: Klook Bookings API
+  description: The Bookings API from Klook — 5 operation(s) for bookings.
+  humanURL: https://klook.gitbook.io/openapi
+  baseURL: https://{supplier_endpoint}/octo
+  tags:
+  - Bookings
+  properties:
+  - type: OpenAPI
+    url: openapi/klook-bookings-api-openapi.yml
+  - type: Documentation
+    url: https://klook.gitbook.io/openapi
+  - type: APIReference
+    url: https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md
+  - type: GettingStarted
+    url: https://klook.gitbook.io/openapi/getting-started/integration-process.md
+  - type: Authentication
+    url: https://klook.gitbook.io/openapi/getting-started/authentication.md
+  - type: ErrorCodes
+    url: https://klook.gitbook.io/openapi/getting-started/errors.md
+- aid: klook:klook-products-api
+  name: Klook Products API
+  description: The Products API from Klook — 2 operation(s) for products.
+  humanURL: https://klook.gitbook.io/openapi
+  baseURL: https://{supplier_endpoint}/octo
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/klook-products-api-openapi.yml
+  - type: Documentation
+    url: https://klook.gitbook.io/openapi
+  - type: APIReference
+    url: https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md
+  - type: GettingStarted
+    url: https://klook.gitbook.io/openapi/getting-started/integration-process.md
+  - type: Authentication
+    url: https://klook.gitbook.io/openapi/getting-started/authentication.md
+  - type: ErrorCodes
+    url: https://klook.gitbook.io/openapi/getting-started/errors.md
+- aid: klook:klook-supplier-api
+  name: Klook Supplier API
+  description: The Supplier API from Klook — 1 operation(s) for supplier.
+  humanURL: https://klook.gitbook.io/openapi
+  baseURL: https://{supplier_endpoint}/octo
+  tags:
+  - Supplier
+  properties:
+  - type: OpenAPI
+    url: openapi/klook-supplier-api-openapi.yml
+  - type: Documentation
+    url: https://klook.gitbook.io/openapi
+  - type: APIReference
+    url: https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md
+  - type: GettingStarted
+    url: https://klook.gitbook.io/openapi/getting-started/integration-process.md
+  - type: Authentication
+    url: https://klook.gitbook.io/openapi/getting-started/authentication.md
+  - type: ErrorCodes
+    url: https://klook.gitbook.io/openapi/getting-started/errors.md
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -26,4 +136,63 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.klook.com/en-IN/
+  url: https://www.klook.com/en-US/
+- type: DeveloperPortal
+  url: https://klook.gitbook.io/openapi
+- type: Documentation
+  url: https://klook.gitbook.io/openapi
+- type: APIReference
+  url: https://klook.gitbook.io/openapi/getting-started/endpoint-and-capabilities.md
+- type: GettingStarted
+  url: https://klook.gitbook.io/openapi/getting-started/integration-process.md
+- type: Partners
+  url: https://www.klook.com/partner/
+- type: Affiliate
+  url: https://affiliate.klook.com/home
+- type: MerchantPortal
+  url: https://merchant.klook.com/
+- type: SignUp
+  url: https://affiliate.klook.com/home
+- type: TermsOfService
+  url: https://www.klook.com/conditions/
+- type: PrivacyPolicy
+  url: https://www.klook.com/en-US/policy/
+- type: CookiePolicy
+  url: https://www.klook.com/en-US/cookiepolicy/
+- type: Support
+  url: https://www.klook.com/en-US/faq/
+- type: About
+  url: https://www.klook.com/en-US/about/
+- type: LLMsTxt
+  url: llms/klook-llms.txt
+- type: Authentication
+  url: authentication/klook-authentication.yml
+- type: Conventions
+  url: conventions/klook-conventions.yml
+- type: ErrorCatalog
+  url: errors/klook-error-codes.yml
+- type: Conformance
+  url: conformance/klook-conformance.yml
+- type: Lifecycle
+  url: lifecycle/klook-lifecycle.yml
+- type: ChangeLog
+  url: changelog/klook-changelog.yml
+- type: DataModel
+  url: data-model/klook-data-model.yml
+- type: Overlay
+  url: overlays/klook-octo-overlay.yaml
+- type: MCPServer
+  url: mcp/klook-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/klook-notifications-webhooks.yml
+- type: Packages
+  url: packages/klook-packages.yml
+- type: DomainSecurity
+  url: security/klook-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
