@@ -1,0 +1,102 @@
+{
+  "item": [
+    {
+      "id": "b6851b4d-4284-4d0a-99db-486aa2997fb2",
+      "name": "Supplier",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7272f5cf-c25c-40b3-b006-a263b4494b3f",
+          "name": "Get Supplier",
+          "request": {
+            "name": "Get Supplier",
+            "description": {
+              "content": "Returns the supplier and associated contact details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "supplier"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "46c0e7d4-b575-457e-a09e-8e6d32967130",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "supplier"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"697e3ce8-1860-4cbf-80ad-95857df1f640\",\n  \"name\": \"Edin Explore\",\n  \"endpoint\": \"https://api.my-booking-platform.com/v1\",\n  \"contact\": {\n    \"website\": null,\n    \"email\": null,\n    \"telephone\": null,\n    \"address\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.example.com/octo",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "24dc9ffe-901c-4b5f-b433-e711522aac4f",
+    "name": "OCTO API Specification Availability Supplier API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OCTO (Open Connectivity for Tours, Activities, and Attractions) is an open standard API specification for the in-destination experiences sector of the travel industry. The standard defines agreed-upon schemas, endpoints, and capabilities commonly needed when connecting platforms, resellers, OTAs, and other technologies in tours, activities, and attractions._\n\nOCTO is open source. Available to anyone who wants to use it. You do not need to be a member to use this specification in your business.\n\nContact Support:\n Name: OCTO Standards NP Inc\n Email: sayhello@octo.travel",
+      "type": "text/plain"
+    }
+  }
+}

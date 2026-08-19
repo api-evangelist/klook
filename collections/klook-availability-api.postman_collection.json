@@ -1,0 +1,303 @@
+{
+  "item": [
+    {
+      "id": "13c00969-ac6d-4cc2-a26a-eeed9b639d3a",
+      "name": "Availability",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab02d6f9-3272-4c46-b22d-8064a6eb491c",
+          "name": "Availability Calendar",
+          "request": {
+            "name": "Availability Calendar",
+            "description": {
+              "content": "This endpoint is highly optimised and will return a single object per day. It's designed to be queried for large date ranges and the result is used to populate an availability calendar.\n\nWhen the end user selects an open date you can call on `/availability` endpoint to get the `availabilityId` to create the booking.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "availability",
+                "calendar"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"<string>\",\n  \"optionId\": \"<string>\",\n  \"localDateStart\": \"<string>\",\n  \"localDateEnd\": \"<string>\",\n  \"units\": [\n    {\n      \"id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "eee786e5-0476-46af-9c59-fe550e11f4a8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "availability",
+                    "calendar"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productId\": \"6b903d44-dc24-4ca4-ae71-6bde6c4f4854\",\n  \"optionId\": \"DEFAULT\",\n  \"localDateStart\": \"2022-06-14\",\n  \"localDateEnd\": \"2022-06-16\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"localDate\": \"2022-06-14\",\n    \"available\": true,\n    \"status\": \"AVAILABLE\",\n    \"vacancies\": 20,\n    \"capacity\": 20,\n    \"openingHours\": []\n  },\n  {\n    \"localDate\": \"2022-06-15\",\n    \"available\": true,\n    \"status\": \"AVAILABLE\",\n    \"vacancies\": 10,\n    \"capacity\": 10,\n    \"openingHours\": []\n  },\n  {\n    \"localDate\": \"2022-06-16\",\n    \"available\": true,\n    \"status\": \"AVAILABLE\",\n    \"vacancies\": 10,\n    \"capacity\": 10,\n    \"openingHours\": []\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d2ca298-62aa-47ff-9dbc-6e8f50f3f33c",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "availability",
+                    "calendar"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productId\": \"6b903d44-dc24-4ca4-ae71-6bde6c4f4854\",\n  \"optionId\": \"DEFAULT\",\n  \"localDateStart\": \"2022-06-14\",\n  \"localDateEnd\": \"2022-06-16\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_PRODUCT_ID\",\n  \"errorMessage\": \"The productId was missing or invalid\",\n  \"productId\": \"cc2a6d56-6efe-426f-99c9-6eb10e341565\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f345dd2f-4d55-4fd2-96a8-2f8ad1e3235c",
+          "name": "Availability Check",
+          "request": {
+            "name": "Availability Check",
+            "description": {
+              "content": "This endpoint is slightly slower as it will return an object for each individual departure time (or day). You have to perform this step to retrieve an `availabilityId` in order to confirm a sale, so if you just want to use this endpoint and skip the calendar endpoint then that's perfectly ok.\n\nYou must pass in one of the following combinations of parameters for this endpoint:\n- `localDate`\n- `localeDateStart` and `localDateEnd`\n- `availabilityIds`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"<string>\",\n  \"optionId\": \"<string>\",\n  \"localDateStart\": \"<date>\",\n  \"localDateEnd\": \"<date>\",\n  \"availabilityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"units\": [\n    {\n      \"id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"quantity\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "52c282c6-015e-4f5e-aa32-8f2361b5c16d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productId\": \"6b903d44-dc24-4ca4-ae71-6bde6c4f4854\",\n  \"optionId\": \"DEFAULT\",\n  \"localDateStart\": \"2022-05-23\",\n  \"localDateEnd\": \"2022-05-29\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"2022-06-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-06-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-07-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"available\": true,\n    \"status\": \"FREESALE\",\n    \"vacancies\": null,\n    \"capacity\": null,\n    \"maxUnits\": null,\n    \"utcCutoffAt\": \"2022-06-29T22:00:00Z\",\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61d73cee-63ca-421b-8563-0b5b80e57578",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productId\": \"6b903d44-dc24-4ca4-ae71-6bde6c4f4854\",\n  \"optionId\": \"DEFAULT\",\n  \"localDateStart\": \"2022-05-23\",\n  \"localDateEnd\": \"2022-05-29\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_PRODUCT_ID\",\n  \"errorMessage\": \"The productId was missing or invalid\",\n  \"productId\": \"cc2a6d56-6efe-426f-99c9-6eb10e341565\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.example.com/octo",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "91d6e7bf-6490-4f6e-b88d-42b905e1da26",
+    "name": "OCTO API Specification Availability API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OCTO (Open Connectivity for Tours, Activities, and Attractions) is an open standard API specification for the in-destination experiences sector of the travel industry. The standard defines agreed-upon schemas, endpoints, and capabilities commonly needed when connecting platforms, resellers, OTAs, and other technologies in tours, activities, and attractions._\n\nOCTO is open source. Available to anyone who wants to use it. You do not need to be a member to use this specification in your business.\n\nContact Support:\n Name: OCTO Standards NP Inc\n Email: sayhello@octo.travel",
+      "type": "text/plain"
+    }
+  }
+}

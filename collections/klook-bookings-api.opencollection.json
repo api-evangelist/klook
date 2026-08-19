@@ -1,0 +1,233 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OCTO API Specification Availability Bookings API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bookings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Bookings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.example.com/octo/bookings",
+            "params": [
+              {
+                "name": "resellerReference",
+                "value": "",
+                "type": "query",
+                "description": "The reseller reference on the booking"
+              },
+              {
+                "name": "supplierReference",
+                "value": "",
+                "type": "query",
+                "description": "The reference provided by the supplier"
+              },
+              {
+                "name": "localDate",
+                "value": "",
+                "type": "query",
+                "description": "All bookings made for a specific date"
+              },
+              {
+                "name": "localDateStart",
+                "value": "",
+                "type": "query",
+                "description": "First date of a date range search"
+              },
+              {
+                "name": "localDateEnd",
+                "value": "",
+                "type": "query",
+                "description": "Last date of a date range search"
+              },
+              {
+                "name": "productId",
+                "value": "",
+                "type": "query",
+                "description": "The product id to filter by"
+              },
+              {
+                "name": "optionId",
+                "value": "",
+                "type": "query",
+                "description": "The option id to filter by"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This endpoint will fetch the bookings you have made for the given filters.\n\nWhen using this endpoint you must include one of the following query parameters:\n\n- `resellerReference`\n- `supplierReference`\n- `localDate`\n- `localDateStart` and `localDateEnd`"
+        },
+        {
+          "info": {
+            "name": "Booking Reservation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.example.com/octo/bookings",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reserving availability when making a booking. The steps to make a reservation are:\n\n1. **Check Availability**: Check the availability on the [/availability](docs/octo/branches/main/5b08f5f75e75d-availability-check) endpoint to retrieve an `availabilityId`\n2. **Booking Reservation** (this step): Create a booking that reserves the availability while you collect payment and contact information from the customer. The booking will remain with status `ON_HOLD` until the booking is confirmed or the res"
+        },
+        {
+          "info": {
+            "name": "Booking Confirmation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.example.com/octo/bookings/:uuid/confirm",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the booking"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This endpoint confirms the booking so it's ready to be used."
+        },
+        {
+          "info": {
+            "name": "Booking Cancellation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.example.com/octo/bookings/:uuid/cancel",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "For cancelling bookings. You can only cancel a booking if `booking.cancellable` is `TRUE`, and is within the booking cancellation cut-off window."
+        },
+        {
+          "info": {
+            "name": "Get Booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.example.com/octo/bookings/:uuid",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the booking"
+              }
+            ]
+          },
+          "docs": "Fetch the status of an existing booking."
+        },
+        {
+          "info": {
+            "name": "Booking Update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.example.com/octo/bookings/:uuid",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the booking"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a booking before and after it has been confirmed as long as it hasn''t been redeemed or within the cancellation cutoff window. To know if the booking can be updated check the booking''s `cancellable` field. If the booking can be cancelled, it can also be updated. It''s generally preferred to update a booking rather than cancelling it and rebooking."
+        },
+        {
+          "info": {
+            "name": "Extend Reservation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.example.com/octo/bookings/:uuid/extend",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the booking"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Use this endpoint to hold the availability for a booking longer if the status is `ON_HOLD`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "repo": "klook",
+    "captured_at": "2026-08-17T123946",
+    "source_url": "https://www.klook.com/en-US/",
+    "source_type": "Website",
+    "file": "klook-2026-08-17T123946.png",
+    "bytes": 92647,
+    "capture": "playwright-local"
+  }
+]

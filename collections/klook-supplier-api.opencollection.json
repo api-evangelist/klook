@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OCTO API Specification Availability Supplier API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Supplier",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Supplier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.example.com/octo/supplier"
+          },
+          "docs": "Returns the supplier and associated contact details."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

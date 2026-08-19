@@ -1,0 +1,1265 @@
+{
+  "item": [
+    {
+      "id": "d8315e1d-1170-4017-b300-95a73b09548c",
+      "name": "Bookings",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7eb8eb8f-62ce-4ad9-b3a5-6354b9514a7c",
+          "name": "Booking Reservation",
+          "request": {
+            "name": "Booking Reservation",
+            "description": {
+              "content": "Reserving availability when making a booking. The steps to make a reservation are:\n\n1. **Check Availability**: Check the availability on the [/availability](docs/octo/branches/main/5b08f5f75e75d-availability-check) endpoint to retrieve an `availabilityId`\n2. **Booking Reservation** (this step): Create a booking that reserves the availability while you collect payment and contact information from the customer. The booking will remain with status `ON_HOLD` until the booking is confirmed or the reservation hold expires.\n\nThe availability for the booking is held for the amount of time equal to the`expirationMinutes` parameter (if provided), up to an internal limit set by either the supplier or the OCTo provider. The `utc_expires_at` parameter in the response object will indicate when a reservtion will expire. A reservation can be extended by calling the [/bookings/{uuid}/extend](docs/octo/branches/main/2c7924ab9128f-extend-reservation) endpoint.\n\nA reserved booking can be confirmed after the customer finalizes their choice on the [/bookings/{uuid}/confirm](docs/octo/branches/main/614d1613b2d70-booking-confirmation) endpoint provided the reservation had not expired.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"<string>\",\n  \"optionId\": \"<string>\",\n  \"availabilityId\": \"<string>\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\"\n    },\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\"\n    }\n  ],\n  \"uuid\": \"<uuid>\",\n  \"expirationMinutes\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f77e2a2d-f428-484b-939b-2e1ae4d59c10",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Required field on all POST requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productId\": \"1a7213eb-3a33-4cbb-b114-64d771c201ac\",\n  \"optionId\": \"DEFAULT\",\n  \"availabilityId\": \"2020-07-01T14:30:00-05:00\",\n  \"notes\": \"Optional notes for the booking\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"adult\"\n    },\n    {\n      \"unitId\": \"adult\"\n    },\n    {\n      \"unitId\": \"child\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"602a9fdf-5c79-4984-9474-7e14da9b6027\",\n  \"uuid\": \"a88b4b8d-9c3b-4a09-ba27-323b43af57e4\",\n  \"testMode\": true,\n  \"resellerReference\": null,\n  \"supplierReference\": \"XOPSUT\",\n  \"status\": \"ON_HOLD\",\n  \"utcCreatedAt\": \"2022-05-25T10:34:22Z\",\n  \"utcUpdatedAt\": \"2022-05-25T10:34:22Z\",\n  \"utcExpiresAt\": \"2022-05-25T11:04:22Z\",\n  \"utcRedeemedAt\": null,\n  \"utcConfirmedAt\": null,\n  \"productId\": \"1\",\n  \"product\": {\n    \"id\": \"1\",\n    \"internalName\": \"PPU | OH\",\n    \"reference\": null,\n    \"locale\": \"en\",\n    \"timeZone\": \"Europe/London\",\n    \"allowFreesale\": false,\n    \"instantConfirmation\": true,\n    \"instantDelivery\": true,\n    \"availabilityRequired\": true,\n    \"availabilityType\": \"OPENING_HOURS\",\n    \"deliveryFormats\": [\n      \"PDF_URL\",\n      \"QRCODE\"\n    ],\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"redemptionMethod\": \"DIGITAL\",\n    \"options\": [\n      {\n        \"id\": \"DEFAULT\",\n        \"default\": true,\n        \"internalName\": \"DEFAULT\",\n        \"reference\": null,\n        \"availabilityLocalStartTimes\": [\n          \"00:00\"\n        ],\n        \"cancellationCutoff\": \"0 hours\",\n        \"cancellationCutoffAmount\": 0,\n        \"cancellationCutoffUnit\": \"hour\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minUnits\": 0,\n          \"maxUnits\": null\n        },\n        \"units\": [\n          {\n            \"id\": \"adult\",\n            \"internalName\": \"adult\",\n            \"reference\": \"adult\",\n            \"type\": \"ADULT\",\n            \"requiredContactFields\": [],\n            \"restrictions\": {\n              \"minAge\": 18,\n              \"maxAge\": 100,\n              \"idRequired\": false,\n              \"minQuantity\": null,\n              \"maxQuantity\": null,\n              \"paxCount\": 1,\n              \"accompaniedBy\": []\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"optionId\": \"DEFAULT\",\n  \"option\": {\n    \"id\": \"DEFAULT\",\n    \"default\": true,\n    \"internalName\": \"DEFAULT\",\n    \"reference\": null,\n    \"availabilityLocalStartTimes\": [\n      \"00:00\"\n    ],\n    \"cancellationCutoff\": \"0 hours\",\n    \"cancellationCutoffAmount\": 0,\n    \"cancellationCutoffUnit\": \"hour\",\n    \"requiredContactFields\": [],\n    \"restrictions\": {\n      \"minUnits\": 0,\n      \"maxUnits\": null\n    },\n    \"units\": [\n      {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      }\n    ]\n  },\n  \"cancellable\": true,\n  \"cancellation\": null,\n  \"freesale\": false,\n  \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n  \"availability\": {\n    \"id\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  },\n  \"contact\": {\n    \"fullName\": null,\n    \"firstName\": null,\n    \"lastName\": null,\n    \"emailAddress\": null,\n    \"phoneNumber\": null,\n    \"locales\": [],\n    \"country\": null,\n    \"notes\": null\n  },\n  \"notes\": null,\n  \"deliveryMethods\": [\n    \"TICKET\",\n    \"VOUCHER\"\n  ],\n  \"voucher\": {\n    \"redemptionMethod\": \"DIGITAL\",\n    \"utcRedeemedAt\": null,\n    \"deliveryOptions\": []\n  },\n  \"unitItems\": [\n    {\n      \"uuid\": \"6cbd2582-1345-4d8d-8223-ad004beebc1a\",\n      \"resellerReference\": null,\n      \"supplierReference\": \"CBIYWQ\",\n      \"unit\": {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      },\n      \"unitId\": \"adult\",\n      \"status\": \"ON_HOLD\",\n      \"utcRedeemedAt\": null,\n      \"contact\": {\n        \"fullName\": null,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"emailAddress\": null,\n        \"phoneNumber\": null,\n        \"locales\": [],\n        \"country\": null,\n        \"notes\": null\n      },\n      \"ticket\": {\n        \"redemptionMethod\": \"DIGITAL\",\n        \"utcRedeemedAt\": null,\n        \"deliveryOptions\": []\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5aa47260-b454-4eb8-a475-09012ff050f5",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Required field on all POST requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productId\": \"1a7213eb-3a33-4cbb-b114-64d771c201ac\",\n  \"optionId\": \"DEFAULT\",\n  \"availabilityId\": \"2020-07-01T14:30:00-05:00\",\n  \"notes\": \"Optional notes for the booking\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"adult\"\n    },\n    {\n      \"unitId\": \"adult\"\n    },\n    {\n      \"unitId\": \"child\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_PRODUCT_ID\",\n  \"errorMessage\": \"The productId was missing or invalid\",\n  \"productId\": \"cc2a6d56-6efe-426f-99c9-6eb10e341565\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6024cb70-7f88-49a9-bf00-8219090d22f5",
+          "name": "Get Bookings",
+          "request": {
+            "name": "Get Bookings",
+            "description": {
+              "content": "This endpoint will fetch the bookings you have made for the given filters.\n\nWhen using this endpoint you must include one of the following query parameters:\n\n- `resellerReference`\n- `supplierReference`\n- `localDate`\n- `localDateStart` and `localDateEnd`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "resellerReference",
+                  "value": "<string>",
+                  "description": "The reseller reference on the booking"
+                },
+                {
+                  "disabled": false,
+                  "key": "supplierReference",
+                  "value": "<string>",
+                  "description": "The reference provided by the supplier"
+                },
+                {
+                  "disabled": false,
+                  "key": "localDate",
+                  "value": "<string>",
+                  "description": "All bookings made for a specific date"
+                },
+                {
+                  "disabled": false,
+                  "key": "localDateStart",
+                  "value": "<string>",
+                  "description": "First date of a date range search"
+                },
+                {
+                  "disabled": false,
+                  "key": "localDateEnd",
+                  "value": "<string>",
+                  "description": "Last date of a date range search"
+                },
+                {
+                  "disabled": false,
+                  "key": "productId",
+                  "value": "<string>",
+                  "description": "The product id to filter by"
+                },
+                {
+                  "disabled": false,
+                  "key": "optionId",
+                  "value": "<string>",
+                  "description": "The option id to filter by"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e8e033ac-1176-494c-81ba-82173bd26c02",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "resellerReference",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplierReference",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "localDate",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "localDateStart",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "localDateEnd",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "productId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "optionId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"3ef65048-5ffe-474f-8a5c-fb35a9faa6ed\",\n    \"uuid\": \"814d2566-2c71-4e6a-aaa9-59b9bf26cc0d\",\n    \"testMode\": true,\n    \"resellerReference\": null,\n    \"supplierReference\": \"RNSRSM\",\n    \"status\": \"CONFIRMED\",\n    \"utcCreatedAt\": \"2022-05-25T11:07:05Z\",\n    \"utcUpdatedAt\": \"2022-05-25T11:09:32Z\",\n    \"utcExpiresAt\": null,\n    \"utcRedeemedAt\": null,\n    \"utcConfirmedAt\": \"2022-05-25T11:09:32Z\",\n    \"productId\": \"1\",\n    \"product\": {\n      \"id\": \"1\",\n      \"internalName\": \"PPU | OH\",\n      \"reference\": null,\n      \"locale\": \"en\",\n      \"timeZone\": \"Europe/London\",\n      \"allowFreesale\": false,\n      \"instantConfirmation\": true,\n      \"instantDelivery\": true,\n      \"availabilityRequired\": true,\n      \"availabilityType\": \"OPENING_HOURS\",\n      \"deliveryFormats\": [\n        \"PDF_URL\",\n        \"QRCODE\"\n      ],\n      \"deliveryMethods\": [\n        \"TICKET\",\n        \"VOUCHER\"\n      ],\n      \"redemptionMethod\": \"DIGITAL\",\n      \"options\": [\n        {\n          \"id\": \"DEFAULT\",\n          \"default\": true,\n          \"internalName\": \"DEFAULT\",\n          \"reference\": null,\n          \"availabilityLocalStartTimes\": [\n            \"00:00\"\n          ],\n          \"cancellationCutoff\": \"0 hours\",\n          \"cancellationCutoffAmount\": 0,\n          \"cancellationCutoffUnit\": \"hour\",\n          \"requiredContactFields\": [],\n          \"restrictions\": {\n            \"minUnits\": 0,\n            \"maxUnits\": null\n          },\n          \"units\": [\n            {\n              \"id\": \"adult\",\n              \"internalName\": \"adult\",\n              \"reference\": \"adult\",\n              \"type\": \"ADULT\",\n              \"requiredContactFields\": [],\n              \"restrictions\": {\n                \"minAge\": 18,\n                \"maxAge\": 100,\n                \"idRequired\": false,\n                \"minQuantity\": null,\n                \"maxQuantity\": null,\n                \"paxCount\": 1,\n                \"accompaniedBy\": []\n              }\n            }\n          ]\n        }\n      ]\n    },\n    \"optionId\": \"DEFAULT\",\n    \"option\": {\n      \"id\": \"DEFAULT\",\n      \"default\": true,\n      \"internalName\": \"DEFAULT\",\n      \"reference\": null,\n      \"availabilityLocalStartTimes\": [\n        \"00:00\"\n      ],\n      \"cancellationCutoff\": \"0 hours\",\n      \"cancellationCutoffAmount\": 0,\n      \"cancellationCutoffUnit\": \"hour\",\n      \"requiredContactFields\": [],\n      \"restrictions\": {\n        \"minUnits\": 0,\n        \"maxUnits\": null\n      },\n      \"units\": [\n        {\n          \"id\": \"adult\",\n          \"internalName\": \"adult\",\n          \"reference\": \"adult\",\n          \"type\": \"ADULT\",\n          \"requiredContactFields\": [],\n          \"restrictions\": {\n            \"minAge\": 18,\n            \"maxAge\": 100,\n            \"idRequired\": false,\n            \"minQuantity\": null,\n            \"maxQuantity\": null,\n            \"paxCount\": 1,\n            \"accompaniedBy\": []\n          }\n        }\n      ]\n    },\n    \"cancellable\": true,\n    \"cancellation\": null,\n    \"freesale\": false,\n    \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n    \"availability\": {\n      \"id\": \"2022-04-30T00:00:00+01:00\",\n      \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n      \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n      \"allDay\": true,\n      \"openingHours\": [\n        {\n          \"from\": \"09:00\",\n          \"to\": \"17:00\"\n        }\n      ]\n    },\n    \"contact\": {\n      \"fullName\": \"John\",\n      \"firstName\": \"Doe\",\n      \"lastName\": null,\n      \"emailAddress\": \"john.doe@email.com\",\n      \"phoneNumber\": null,\n      \"locales\": [],\n      \"country\": null,\n      \"notes\": null\n    },\n    \"notes\": null,\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"voucher\": {\n      \"redemptionMethod\": \"DIGITAL\",\n      \"utcRedeemedAt\": null,\n      \"deliveryOptions\": [\n        {\n          \"deliveryFormat\": \"PDF_URL\",\n          \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=814d2566-2c71-4e6a-aaa9-59b9bf26cc0d\"\n        },\n        {\n          \"deliveryFormat\": \"QRCODE\",\n          \"deliveryValue\": \"RNSRSM\"\n        }\n      ]\n    },\n    \"unitItems\": [\n      {\n        \"uuid\": \"a204e6de-7909-4bf2-b7a8-2884189534bc\",\n        \"resellerReference\": null,\n        \"supplierReference\": \"1LTYVC\",\n        \"unit\": {\n          \"id\": \"adult\",\n          \"internalName\": \"adult\",\n          \"reference\": \"adult\",\n          \"type\": \"ADULT\",\n          \"requiredContactFields\": [],\n          \"restrictions\": {\n            \"minAge\": 18,\n            \"maxAge\": 100,\n            \"idRequired\": false,\n            \"minQuantity\": null,\n            \"maxQuantity\": null,\n            \"paxCount\": 1,\n            \"accompaniedBy\": []\n          }\n        },\n        \"unitId\": \"adult\",\n        \"status\": \"ON_HOLD\",\n        \"utcRedeemedAt\": null,\n        \"contact\": {\n          \"fullName\": null,\n          \"firstName\": null,\n          \"lastName\": null,\n          \"emailAddress\": null,\n          \"phoneNumber\": null,\n          \"locales\": [],\n          \"country\": null,\n          \"notes\": null\n        },\n        \"ticket\": {\n          \"redemptionMethod\": \"DIGITAL\",\n          \"utcRedeemedAt\": null,\n          \"deliveryOptions\": [\n            {\n              \"deliveryFormat\": \"PDF_URL\",\n              \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=814d2566-2c71-4e6a-aaa9-59b9bf26cc0d&ticket=a204e6de-7909-4bf2-b7a8-2884189534bc\"\n            },\n            {\n              \"deliveryFormat\": \"QRCODE\",\n              \"deliveryValue\": \"1LTYVC\"\n            }\n          ]\n        }\n      },\n      {\n        \"uuid\": \"9116e598-6713-4cb5-8ba4-e5b839f7a5d5\",\n        \"resellerReference\": null,\n        \"supplierReference\": \"A89VR8\",\n        \"unit\": {\n          \"id\": \"adult\",\n          \"internalName\": \"adult\",\n          \"reference\": \"adult\",\n          \"type\": \"ADULT\",\n          \"requiredContactFields\": [],\n          \"restrictions\": {\n            \"minAge\": 18,\n            \"maxAge\": 100,\n            \"idRequired\": false,\n            \"minQuantity\": null,\n            \"maxQuantity\": null,\n            \"paxCount\": 1,\n            \"accompaniedBy\": []\n          }\n        },\n        \"unitId\": \"adult\",\n        \"status\": \"ON_HOLD\",\n        \"utcRedeemedAt\": null,\n        \"contact\": {\n          \"fullName\": null,\n          \"firstName\": null,\n          \"lastName\": null,\n          \"emailAddress\": null,\n          \"phoneNumber\": null,\n          \"locales\": [],\n          \"country\": null,\n          \"notes\": null\n        },\n        \"ticket\": {\n          \"redemptionMethod\": \"DIGITAL\",\n          \"utcRedeemedAt\": null,\n          \"deliveryOptions\": [\n            {\n              \"deliveryFormat\": \"PDF_URL\",\n              \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=814d2566-2c71-4e6a-aaa9-59b9bf26cc0d&ticket=9116e598-6713-4cb5-8ba4-e5b839f7a5d5\"\n            },\n            {\n              \"deliveryFormat\": \"QRCODE\",\n              \"deliveryValue\": \"A89VR8\"\n            }\n          ]\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ece44449-64cb-41b9-980b-c49419e716ca",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "resellerReference",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplierReference",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "localDate",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "localDateStart",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "localDateEnd",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "productId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "optionId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"BAD_REQUEST\",\n  \"errorMessage\": \"either resellerReference, supplierReference, localDate or localDateStart/localDateEnd is required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3393a317-5d0b-4985-9315-48180f2fabeb",
+          "name": "Booking Confirmation",
+          "request": {
+            "name": "Booking Confirmation",
+            "description": {
+              "content": "This endpoint confirms the booking so it's ready to be used.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":uuid",
+                "confirm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) The UUID of the booking"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contact\": {\n    \"fullName\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"emailAddress\": \"<email>\",\n    \"phoneNumber\": \"<string>\",\n    \"locales\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"emailReceipt\": \"<boolean>\",\n  \"resellerReference\": \"<string>\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"<string>\",\n        \"firstName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"emailAddress\": \"<string>\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    },\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"<string>\",\n        \"firstName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"emailAddress\": \"<string>\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "56a0981b-91f4-43ee-b3be-386e0b28c090",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Required field on all POST requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resellerReference\": \"VOUCHER-0123\",\n  \"contact\": {\n    \"fullName\": \"Oliver Morgan\",\n    \"emailAddress\": \"ollym@me.com\",\n    \"phoneNumber\": \"+447840739436\",\n    \"locales\": [\n      \"en-GB\",\n      \"en-US\",\n      \"en\"\n    ],\n    \"country\": \"GB\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3ac5450f-8511-4386-9feb-17ce4f9e1f86\",\n  \"uuid\": \"ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a\",\n  \"testMode\": true,\n  \"resellerReference\": null,\n  \"supplierReference\": \"ALG6RQ\",\n  \"status\": \"CONFIRMED\",\n  \"utcCreatedAt\": \"2022-05-25T11:03:22Z\",\n  \"utcUpdatedAt\": \"2022-05-25T11:03:31Z\",\n  \"utcExpiresAt\": null,\n  \"utcRedeemedAt\": null,\n  \"utcConfirmedAt\": \"2022-05-25T11:03:31Z\",\n  \"productId\": \"1\",\n  \"product\": {\n    \"id\": \"1\",\n    \"internalName\": \"PPU | OH\",\n    \"reference\": null,\n    \"locale\": \"en\",\n    \"timeZone\": \"Europe/London\",\n    \"allowFreesale\": false,\n    \"instantConfirmation\": true,\n    \"instantDelivery\": true,\n    \"availabilityRequired\": true,\n    \"availabilityType\": \"OPENING_HOURS\",\n    \"deliveryFormats\": [\n      \"PDF_URL\",\n      \"QRCODE\"\n    ],\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"redemptionMethod\": \"DIGITAL\",\n    \"options\": [\n      {\n        \"id\": \"DEFAULT\",\n        \"default\": true,\n        \"internalName\": \"DEFAULT\",\n        \"reference\": null,\n        \"availabilityLocalStartTimes\": [\n          \"00:00\"\n        ],\n        \"cancellationCutoff\": \"0 hours\",\n        \"cancellationCutoffAmount\": 0,\n        \"cancellationCutoffUnit\": \"hour\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minUnits\": 0,\n          \"maxUnits\": null\n        },\n        \"units\": [\n          {\n            \"id\": \"adult\",\n            \"internalName\": \"adult\",\n            \"reference\": \"adult\",\n            \"type\": \"ADULT\",\n            \"requiredContactFields\": [],\n            \"restrictions\": {\n              \"minAge\": 18,\n              \"maxAge\": 100,\n              \"idRequired\": false,\n              \"minQuantity\": null,\n              \"maxQuantity\": null,\n              \"paxCount\": 1,\n              \"accompaniedBy\": []\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"optionId\": \"DEFAULT\",\n  \"option\": {\n    \"id\": \"DEFAULT\",\n    \"default\": true,\n    \"internalName\": \"DEFAULT\",\n    \"reference\": null,\n    \"availabilityLocalStartTimes\": [\n      \"00:00\"\n    ],\n    \"cancellationCutoff\": \"0 hours\",\n    \"cancellationCutoffAmount\": 0,\n    \"cancellationCutoffUnit\": \"hour\",\n    \"requiredContactFields\": [],\n    \"restrictions\": {\n      \"minUnits\": 0,\n      \"maxUnits\": null\n    },\n    \"units\": [\n      {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      }\n    ]\n  },\n  \"cancellable\": true,\n  \"cancellation\": null,\n  \"freesale\": false,\n  \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n  \"availability\": {\n    \"id\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  },\n  \"contact\": {\n    \"fullName\": \"John Doe\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"emailAddress\": \"johndoe@email.com\",\n    \"phoneNumber\": null,\n    \"locales\": [],\n    \"country\": null,\n    \"notes\": null\n  },\n  \"notes\": null,\n  \"deliveryMethods\": [\n    \"TICKET\",\n    \"VOUCHER\"\n  ],\n  \"voucher\": {\n    \"redemptionMethod\": \"DIGITAL\",\n    \"utcRedeemedAt\": null,\n    \"deliveryOptions\": [\n      {\n        \"deliveryFormat\": \"PDF_URL\",\n        \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a\"\n      },\n      {\n        \"deliveryFormat\": \"QRCODE\",\n        \"deliveryValue\": \"ALG6RQ\"\n      }\n    ]\n  },\n  \"unitItems\": [\n    {\n      \"uuid\": \"25ec5429-d563-45f9-ba5b-85b03edbf65e\",\n      \"resellerReference\": null,\n      \"supplierReference\": \"EO6Q0P\",\n      \"unit\": {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      },\n      \"unitId\": \"adult\",\n      \"status\": \"ON_HOLD\",\n      \"utcRedeemedAt\": null,\n      \"contact\": {\n        \"fullName\": null,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"emailAddress\": null,\n        \"phoneNumber\": null,\n        \"locales\": [],\n        \"country\": null,\n        \"notes\": null\n      },\n      \"ticket\": {\n        \"redemptionMethod\": \"DIGITAL\",\n        \"utcRedeemedAt\": null,\n        \"deliveryOptions\": [\n          {\n            \"deliveryFormat\": \"PDF_URL\",\n            \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a&ticket=25ec5429-d563-45f9-ba5b-85b03edbf65e\"\n          },\n          {\n            \"deliveryFormat\": \"QRCODE\",\n            \"deliveryValue\": \"EO6Q0P\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "927785e4-c08b-4a5b-a231-8dbd454687d1",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Required field on all POST requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resellerReference\": \"VOUCHER-0123\",\n  \"contact\": {\n    \"fullName\": \"Oliver Morgan\",\n    \"emailAddress\": \"ollym@me.com\",\n    \"phoneNumber\": \"+447840739436\",\n    \"locales\": [\n      \"en-GB\",\n      \"en-US\",\n      \"en\"\n    ],\n    \"country\": \"GB\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_PRODUCT_ID\",\n  \"errorMessage\": \"The productId was missing or invalid\",\n  \"productId\": \"cc2a6d56-6efe-426f-99c9-6eb10e341565\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04ca5a63-c381-4b3d-a722-c99bcd90835d",
+          "name": "Booking Cancellation",
+          "request": {
+            "name": "Booking Cancellation",
+            "description": {
+              "content": "For cancelling bookings. You can only cancel a booking if `booking.cancellable` is `TRUE`, and is within the booking cancellation cut-off window.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":uuid",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"force\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d2565464-3fb3-4d17-9c8b-088d5f26c0ec",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Required field on all DELETE requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Customer Requested\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3ac5450f-8511-4386-9feb-17ce4f9e1f86\",\n  \"uuid\": \"ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a\",\n  \"testMode\": true,\n  \"resellerReference\": null,\n  \"supplierReference\": \"ALG6RQ\",\n  \"status\": \"CANCELLED\",\n  \"utcCreatedAt\": \"2022-05-25T11:03:22Z\",\n  \"utcUpdatedAt\": \"2022-05-25T11:06:24Z\",\n  \"utcExpiresAt\": null,\n  \"utcRedeemedAt\": null,\n  \"utcConfirmedAt\": null,\n  \"productId\": \"1\",\n  \"product\": {\n    \"id\": \"1\",\n    \"internalName\": \"PPU | OH\",\n    \"reference\": null,\n    \"locale\": \"en\",\n    \"timeZone\": \"Europe/London\",\n    \"allowFreesale\": false,\n    \"instantConfirmation\": true,\n    \"instantDelivery\": true,\n    \"availabilityRequired\": true,\n    \"availabilityType\": \"OPENING_HOURS\",\n    \"deliveryFormats\": [\n      \"PDF_URL\",\n      \"QRCODE\"\n    ],\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"redemptionMethod\": \"DIGITAL\",\n    \"options\": [\n      {\n        \"id\": \"DEFAULT\",\n        \"default\": true,\n        \"internalName\": \"DEFAULT\",\n        \"reference\": null,\n        \"availabilityLocalStartTimes\": [\n          \"00:00\"\n        ],\n        \"cancellationCutoff\": \"0 hours\",\n        \"cancellationCutoffAmount\": 0,\n        \"cancellationCutoffUnit\": \"hour\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minUnits\": 0,\n          \"maxUnits\": null\n        },\n        \"units\": [\n          {\n            \"id\": \"adult\",\n            \"internalName\": \"adult\",\n            \"reference\": \"adult\",\n            \"type\": \"ADULT\",\n            \"requiredContactFields\": [],\n            \"restrictions\": {\n              \"minAge\": 18,\n              \"maxAge\": 100,\n              \"idRequired\": false,\n              \"minQuantity\": null,\n              \"maxQuantity\": null,\n              \"paxCount\": 1,\n              \"accompaniedBy\": []\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"optionId\": \"DEFAULT\",\n  \"option\": {\n    \"id\": \"DEFAULT\",\n    \"default\": true,\n    \"internalName\": \"DEFAULT\",\n    \"reference\": null,\n    \"availabilityLocalStartTimes\": [\n      \"00:00\"\n    ],\n    \"cancellationCutoff\": \"0 hours\",\n    \"cancellationCutoffAmount\": 0,\n    \"cancellationCutoffUnit\": \"hour\",\n    \"requiredContactFields\": [],\n    \"restrictions\": {\n      \"minUnits\": 0,\n      \"maxUnits\": null\n    },\n    \"units\": [\n      {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      }\n    ]\n  },\n  \"cancellable\": false,\n  \"cancellation\": {\n    \"refund\": \"FULL\",\n    \"reason\": \"this product sucks \",\n    \"utcCancelledAt\": \"2022-05-25T11:06:24Z\"\n  },\n  \"freesale\": false,\n  \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n  \"availability\": {\n    \"id\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  },\n  \"contact\": {\n    \"fullName\": null,\n    \"firstName\": null,\n    \"lastName\": null,\n    \"emailAddress\": null,\n    \"phoneNumber\": null,\n    \"locales\": [],\n    \"country\": null,\n    \"notes\": null\n  },\n  \"notes\": null,\n  \"deliveryMethods\": [\n    \"TICKET\",\n    \"VOUCHER\"\n  ],\n  \"voucher\": {\n    \"redemptionMethod\": \"DIGITAL\",\n    \"utcRedeemedAt\": null,\n    \"deliveryOptions\": []\n  },\n  \"unitItems\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a8ced34-6658-4b99-9781-5a361e067d77",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Required field on all DELETE requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Customer Requested\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_BOOKING_UUID\",\n  \"errorMessage\": \"The uuid was already used, missing or invalid\",\n  \"uuid\": \"bbbb6227-54fc-4c32-9ed7-dc3eb99966ea\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7513d140-b5d3-43a1-8517-35614ac174b0",
+          "name": "Get Booking",
+          "request": {
+            "name": "Get Booking",
+            "description": {
+              "content": "Fetch the status of an existing booking.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":uuid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) The UUID of the booking"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fcb45fbc-3c22-4d22-9559-aa9e6675b58b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3ac5450f-8511-4386-9feb-17ce4f9e1f86\",\n  \"uuid\": \"ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a\",\n  \"testMode\": true,\n  \"resellerReference\": null,\n  \"supplierReference\": \"ALG6RQ\",\n  \"status\": \"CONFIRMED\",\n  \"utcCreatedAt\": \"2022-05-25T11:03:22Z\",\n  \"utcUpdatedAt\": \"2022-05-25T11:03:31Z\",\n  \"utcExpiresAt\": null,\n  \"utcRedeemedAt\": null,\n  \"utcConfirmedAt\": \"2022-05-25T11:03:31Z\",\n  \"productId\": \"1\",\n  \"product\": {\n    \"id\": \"1\",\n    \"internalName\": \"PPU | OH\",\n    \"reference\": null,\n    \"locale\": \"en\",\n    \"timeZone\": \"Europe/London\",\n    \"allowFreesale\": false,\n    \"instantConfirmation\": true,\n    \"instantDelivery\": true,\n    \"availabilityRequired\": true,\n    \"availabilityType\": \"OPENING_HOURS\",\n    \"deliveryFormats\": [\n      \"PDF_URL\",\n      \"QRCODE\"\n    ],\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"redemptionMethod\": \"DIGITAL\",\n    \"options\": [\n      {\n        \"id\": \"DEFAULT\",\n        \"default\": true,\n        \"internalName\": \"DEFAULT\",\n        \"reference\": null,\n        \"availabilityLocalStartTimes\": [\n          \"00:00\"\n        ],\n        \"cancellationCutoff\": \"0 hours\",\n        \"cancellationCutoffAmount\": 0,\n        \"cancellationCutoffUnit\": \"hour\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minUnits\": 0,\n          \"maxUnits\": null\n        },\n        \"units\": [\n          {\n            \"id\": \"adult\",\n            \"internalName\": \"adult\",\n            \"reference\": \"adult\",\n            \"type\": \"ADULT\",\n            \"requiredContactFields\": [],\n            \"restrictions\": {\n              \"minAge\": 18,\n              \"maxAge\": 100,\n              \"idRequired\": false,\n              \"minQuantity\": null,\n              \"maxQuantity\": null,\n              \"paxCount\": 1,\n              \"accompaniedBy\": []\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"optionId\": \"DEFAULT\",\n  \"option\": {\n    \"id\": \"DEFAULT\",\n    \"default\": true,\n    \"internalName\": \"DEFAULT\",\n    \"reference\": null,\n    \"availabilityLocalStartTimes\": [\n      \"00:00\"\n    ],\n    \"cancellationCutoff\": \"0 hours\",\n    \"cancellationCutoffAmount\": 0,\n    \"cancellationCutoffUnit\": \"hour\",\n    \"requiredContactFields\": [],\n    \"restrictions\": {\n      \"minUnits\": 0,\n      \"maxUnits\": null\n    },\n    \"units\": [\n      {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      }\n    ]\n  },\n  \"cancellable\": true,\n  \"cancellation\": null,\n  \"freesale\": false,\n  \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n  \"availability\": {\n    \"id\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  },\n  \"contact\": {\n    \"fullName\": \"John Doe\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"emailAddress\": \"johndoe@email.com\",\n    \"phoneNumber\": null,\n    \"locales\": [],\n    \"country\": null,\n    \"notes\": null\n  },\n  \"notes\": null,\n  \"deliveryMethods\": [\n    \"TICKET\",\n    \"VOUCHER\"\n  ],\n  \"voucher\": {\n    \"redemptionMethod\": \"DIGITAL\",\n    \"utcRedeemedAt\": null,\n    \"deliveryOptions\": [\n      {\n        \"deliveryFormat\": \"PDF_URL\",\n        \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a\"\n      },\n      {\n        \"deliveryFormat\": \"QRCODE\",\n        \"deliveryValue\": \"ALG6RQ\"\n      }\n    ]\n  },\n  \"unitItems\": [\n    {\n      \"uuid\": \"25ec5429-d563-45f9-ba5b-85b03edbf65e\",\n      \"resellerReference\": null,\n      \"supplierReference\": \"EO6Q0P\",\n      \"unit\": {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      },\n      \"unitId\": \"adult\",\n      \"status\": \"ON_HOLD\",\n      \"utcRedeemedAt\": null,\n      \"contact\": {\n        \"fullName\": null,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"emailAddress\": null,\n        \"phoneNumber\": null,\n        \"locales\": [],\n        \"country\": null,\n        \"notes\": null\n      },\n      \"ticket\": {\n        \"redemptionMethod\": \"DIGITAL\",\n        \"utcRedeemedAt\": null,\n        \"deliveryOptions\": [\n          {\n            \"deliveryFormat\": \"PDF_URL\",\n            \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=ec0ce0c2-03f0-4c64-bbc5-5e0f7d1e1c0a&ticket=25ec5429-d563-45f9-ba5b-85b03edbf65e\"\n          },\n          {\n            \"deliveryFormat\": \"QRCODE\",\n            \"deliveryValue\": \"EO6Q0P\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1943e129-74f6-411f-b865-679d71c1f4af",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_BOOKING_UUID\",\n  \"errorMessage\": \"The uuid was already used, missing or invalid\",\n  \"uuid\": \"bbbb6227-54fc-4c32-9ed7-dc3eb99966ea\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5c0179fa-7df4-41dc-a495-81e1bacfaf4c",
+          "name": "Booking Update",
+          "request": {
+            "name": "Booking Update",
+            "description": {
+              "content": "Updates a booking before and after it has been confirmed as long as it hasn''t been redeemed or within the cancellation cutoff window. To know if the booking can be updated check the booking''s `cancellable` field. If the booking can be cancelled, it can also be updated. It''s generally preferred to update a booking rather than cancelling it and rebooking.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":uuid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) The UUID of the booking"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resellerReference\": \"<string>\",\n  \"productId\": \"<string>\",\n  \"optionId\": \"<string>\",\n  \"availabilityId\": \"<string>\",\n  \"expirationMinutes\": \"<string>\",\n  \"notes\": \"<string>\",\n  \"emailReceipt\": \"<boolean>\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"<string>\",\n        \"firstName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"emailAddress\": \"<email>\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    },\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"<string>\",\n        \"firstName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"emailAddress\": \"<email>\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    }\n  ],\n  \"contact\": {\n    \"fullName\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"emailAddress\": \"<email>\",\n    \"phoneNumber\": \"<string>\",\n    \"locales\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"notes\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "89857b6b-8aa1-486c-98e9-55c51ae6d230",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Required field on all PATCH requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resellerReference\": \"ec08a62-892c-48c1-a608-dc946531a33b\",\n  \"productId\": \"6b903d44-dc24-4ca4-ae71-6bde6c4f4854\",\n  \"optionId\": \"DEFAULT\",\n  \"availabilityId\": \"<string>\",\n  \"expirationMinutes\": \"<string>\",\n  \"notes\": \"<string>\",\n  \"emailReceipt\": \"<boolean>\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"John Doe\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"emailAddress\": \"johndoe@gmail.com\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"[\\\"en\\\"]\",\n          \"[\\\"en\\\"]\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    },\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"John Doe\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"emailAddress\": \"johndoe@gmail.com\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"[\\\"en\\\"]\",\n          \"[\\\"en\\\"]\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    }\n  ],\n  \"contact\": {\n    \"fullName\": \"John Doe\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"emailAddress\": \"johndoe@gmail.com\",\n    \"phoneNumber\": \"<string>\",\n    \"locales\": [\n      \"[\\\"en\\\"]\",\n      \"[\\\"en\\\"]\"\n    ],\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"notes\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3ef65048-5ffe-474f-8a5c-fb35a9faa6ed\",\n  \"uuid\": \"814d2566-2c71-4e6a-aaa9-59b9bf26cc0d\",\n  \"testMode\": true,\n  \"resellerReference\": null,\n  \"supplierReference\": \"RNSRSM\",\n  \"status\": \"CONFIRMED\",\n  \"utcCreatedAt\": \"2022-05-25T11:07:05Z\",\n  \"utcUpdatedAt\": \"2022-05-25T11:09:32Z\",\n  \"utcExpiresAt\": null,\n  \"utcRedeemedAt\": null,\n  \"utcConfirmedAt\": \"2022-05-25T11:09:32Z\",\n  \"productId\": \"1\",\n  \"product\": {\n    \"id\": \"1\",\n    \"internalName\": \"PPU | OH\",\n    \"reference\": null,\n    \"locale\": \"en\",\n    \"timeZone\": \"Europe/London\",\n    \"allowFreesale\": false,\n    \"instantConfirmation\": true,\n    \"instantDelivery\": true,\n    \"availabilityRequired\": true,\n    \"availabilityType\": \"OPENING_HOURS\",\n    \"deliveryFormats\": [\n      \"PDF_URL\",\n      \"QRCODE\"\n    ],\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"redemptionMethod\": \"DIGITAL\",\n    \"options\": [\n      {\n        \"id\": \"DEFAULT\",\n        \"default\": true,\n        \"internalName\": \"DEFAULT\",\n        \"reference\": null,\n        \"availabilityLocalStartTimes\": [\n          \"00:00\"\n        ],\n        \"cancellationCutoff\": \"0 hours\",\n        \"cancellationCutoffAmount\": 0,\n        \"cancellationCutoffUnit\": \"hour\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minUnits\": 0,\n          \"maxUnits\": null\n        },\n        \"units\": [\n          {\n            \"id\": \"adult\",\n            \"internalName\": \"adult\",\n            \"reference\": \"adult\",\n            \"type\": \"ADULT\",\n            \"requiredContactFields\": [],\n            \"restrictions\": {\n              \"minAge\": 18,\n              \"maxAge\": 100,\n              \"idRequired\": false,\n              \"minQuantity\": null,\n              \"maxQuantity\": null,\n              \"paxCount\": 1,\n              \"accompaniedBy\": []\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"optionId\": \"DEFAULT\",\n  \"option\": {\n    \"id\": \"DEFAULT\",\n    \"default\": true,\n    \"internalName\": \"DEFAULT\",\n    \"reference\": null,\n    \"availabilityLocalStartTimes\": [\n      \"00:00\"\n    ],\n    \"cancellationCutoff\": \"0 hours\",\n    \"cancellationCutoffAmount\": 0,\n    \"cancellationCutoffUnit\": \"hour\",\n    \"requiredContactFields\": [],\n    \"restrictions\": {\n      \"minUnits\": 0,\n      \"maxUnits\": null\n    },\n    \"units\": [\n      {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      }\n    ]\n  },\n  \"cancellable\": true,\n  \"cancellation\": null,\n  \"freesale\": false,\n  \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n  \"availability\": {\n    \"id\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  },\n  \"contact\": {\n    \"fullName\": \"test\",\n    \"firstName\": null,\n    \"lastName\": null,\n    \"emailAddress\": \"test@test.test\",\n    \"phoneNumber\": null,\n    \"locales\": [],\n    \"country\": null,\n    \"notes\": null\n  },\n  \"notes\": null,\n  \"deliveryMethods\": [\n    \"TICKET\",\n    \"VOUCHER\"\n  ],\n  \"voucher\": {\n    \"redemptionMethod\": \"DIGITAL\",\n    \"utcRedeemedAt\": null,\n    \"deliveryOptions\": [\n      {\n        \"deliveryFormat\": \"PDF_URL\",\n        \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=814d2566-2c71-4e6a-aaa9-59b9bf26cc0d\"\n      },\n      {\n        \"deliveryFormat\": \"QRCODE\",\n        \"deliveryValue\": \"RNSRSM\"\n      }\n    ]\n  },\n  \"unitItems\": [\n    {\n      \"uuid\": \"a204e6de-7909-4bf2-b7a8-2884189534bc\",\n      \"resellerReference\": null,\n      \"supplierReference\": \"1LTYVC\",\n      \"unit\": {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      },\n      \"unitId\": \"adult\",\n      \"status\": \"ON_HOLD\",\n      \"utcRedeemedAt\": null,\n      \"contact\": {\n        \"fullName\": null,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"emailAddress\": null,\n        \"phoneNumber\": null,\n        \"locales\": [],\n        \"country\": null,\n        \"notes\": null\n      },\n      \"ticket\": {\n        \"redemptionMethod\": \"DIGITAL\",\n        \"utcRedeemedAt\": null,\n        \"deliveryOptions\": [\n          {\n            \"deliveryFormat\": \"PDF_URL\",\n            \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=814d2566-2c71-4e6a-aaa9-59b9bf26cc0d&ticket=a204e6de-7909-4bf2-b7a8-2884189534bc\"\n          },\n          {\n            \"deliveryFormat\": \"QRCODE\",\n            \"deliveryValue\": \"1LTYVC\"\n          }\n        ]\n      }\n    },\n    {\n      \"uuid\": \"9116e598-6713-4cb5-8ba4-e5b839f7a5d5\",\n      \"resellerReference\": null,\n      \"supplierReference\": \"A89VR8\",\n      \"unit\": {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      },\n      \"unitId\": \"adult\",\n      \"status\": \"ON_HOLD\",\n      \"utcRedeemedAt\": null,\n      \"contact\": {\n        \"fullName\": null,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"emailAddress\": null,\n        \"phoneNumber\": null,\n        \"locales\": [],\n        \"country\": null,\n        \"notes\": null\n      },\n      \"ticket\": {\n        \"redemptionMethod\": \"DIGITAL\",\n        \"utcRedeemedAt\": null,\n        \"deliveryOptions\": [\n          {\n            \"deliveryFormat\": \"PDF_URL\",\n            \"deliveryValue\": \"https://api.octomock.com/octo/pdf?booking=814d2566-2c71-4e6a-aaa9-59b9bf26cc0d&ticket=9116e598-6713-4cb5-8ba4-e5b839f7a5d5\"\n          },\n          {\n            \"deliveryFormat\": \"QRCODE\",\n            \"deliveryValue\": \"A89VR8\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb734373-c2e7-483f-9937-324ecb8be933",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Required field on all PATCH requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resellerReference\": \"ec08a62-892c-48c1-a608-dc946531a33b\",\n  \"productId\": \"6b903d44-dc24-4ca4-ae71-6bde6c4f4854\",\n  \"optionId\": \"DEFAULT\",\n  \"availabilityId\": \"<string>\",\n  \"expirationMinutes\": \"<string>\",\n  \"notes\": \"<string>\",\n  \"emailReceipt\": \"<boolean>\",\n  \"unitItems\": [\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"John Doe\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"emailAddress\": \"johndoe@gmail.com\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"[\\\"en\\\"]\",\n          \"[\\\"en\\\"]\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    },\n    {\n      \"unitId\": \"<string>\",\n      \"uuid\": \"<string>\",\n      \"resellerReference\": \"<string>\",\n      \"contact\": {\n        \"fullName\": \"John Doe\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"emailAddress\": \"johndoe@gmail.com\",\n        \"phoneNumber\": \"<string>\",\n        \"locales\": [\n          \"[\\\"en\\\"]\",\n          \"[\\\"en\\\"]\"\n        ],\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"notes\": \"<string>\"\n      }\n    }\n  ],\n  \"contact\": {\n    \"fullName\": \"John Doe\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"emailAddress\": \"johndoe@gmail.com\",\n    \"phoneNumber\": \"<string>\",\n    \"locales\": [\n      \"[\\\"en\\\"]\",\n      \"[\\\"en\\\"]\"\n    ],\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"notes\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_PRODUCT_ID\",\n  \"errorMessage\": \"The productId was missing or invalid\",\n  \"productId\": \"cc2a6d56-6efe-426f-99c9-6eb10e341565\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "93725ffd-a37a-4a96-a14e-8ecb577bbeb1",
+          "name": "Extend Reservation",
+          "request": {
+            "name": "Extend Reservation",
+            "description": {
+              "content": "Use this endpoint to hold the availability for a booking longer if the status is `ON_HOLD`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bookings",
+                ":uuid",
+                "extend"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) The UUID of the booking"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expirationMinutes\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "42eb7522-ba6d-4793-a6cc-58149fd3454b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Required field on all POST requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"expirationMinutes\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"602a9fdf-5c79-4984-9474-7e14da9b6027\",\n  \"uuid\": \"a88b4b8d-9c3b-4a09-ba27-323b43af57e4\",\n  \"testMode\": true,\n  \"resellerReference\": null,\n  \"supplierReference\": \"XOPSUT\",\n  \"status\": \"ON_HOLD\",\n  \"utcCreatedAt\": \"2022-05-25T10:34:22Z\",\n  \"utcUpdatedAt\": \"2022-05-25T10:34:22Z\",\n  \"utcExpiresAt\": \"2022-05-25T11:04:22Z\",\n  \"utcRedeemedAt\": null,\n  \"utcConfirmedAt\": null,\n  \"productId\": \"1\",\n  \"product\": {\n    \"id\": \"1\",\n    \"internalName\": \"PPU | OH\",\n    \"reference\": null,\n    \"locale\": \"en\",\n    \"timeZone\": \"Europe/London\",\n    \"allowFreesale\": false,\n    \"instantConfirmation\": true,\n    \"instantDelivery\": true,\n    \"availabilityRequired\": true,\n    \"availabilityType\": \"OPENING_HOURS\",\n    \"deliveryFormats\": [\n      \"PDF_URL\",\n      \"QRCODE\"\n    ],\n    \"deliveryMethods\": [\n      \"TICKET\",\n      \"VOUCHER\"\n    ],\n    \"redemptionMethod\": \"DIGITAL\",\n    \"options\": [\n      {\n        \"id\": \"DEFAULT\",\n        \"default\": true,\n        \"internalName\": \"DEFAULT\",\n        \"reference\": null,\n        \"availabilityLocalStartTimes\": [\n          \"00:00\"\n        ],\n        \"cancellationCutoff\": \"0 hours\",\n        \"cancellationCutoffAmount\": 0,\n        \"cancellationCutoffUnit\": \"hour\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minUnits\": 0,\n          \"maxUnits\": null\n        },\n        \"units\": [\n          {\n            \"id\": \"adult\",\n            \"internalName\": \"adult\",\n            \"reference\": \"adult\",\n            \"type\": \"ADULT\",\n            \"requiredContactFields\": [],\n            \"restrictions\": {\n              \"minAge\": 18,\n              \"maxAge\": 100,\n              \"idRequired\": false,\n              \"minQuantity\": null,\n              \"maxQuantity\": null,\n              \"paxCount\": 1,\n              \"accompaniedBy\": []\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"optionId\": \"DEFAULT\",\n  \"option\": {\n    \"id\": \"DEFAULT\",\n    \"default\": true,\n    \"internalName\": \"DEFAULT\",\n    \"reference\": null,\n    \"availabilityLocalStartTimes\": [\n      \"00:00\"\n    ],\n    \"cancellationCutoff\": \"0 hours\",\n    \"cancellationCutoffAmount\": 0,\n    \"cancellationCutoffUnit\": \"hour\",\n    \"requiredContactFields\": [],\n    \"restrictions\": {\n      \"minUnits\": 0,\n      \"maxUnits\": null\n    },\n    \"units\": [\n      {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      }\n    ]\n  },\n  \"cancellable\": true,\n  \"cancellation\": null,\n  \"freesale\": false,\n  \"availabilityId\": \"2022-04-30T00:00:00+01:00\",\n  \"availability\": {\n    \"id\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeStart\": \"2022-04-30T00:00:00+01:00\",\n    \"localDateTimeEnd\": \"2022-05-01T00:00:00+01:00\",\n    \"allDay\": true,\n    \"openingHours\": [\n      {\n        \"from\": \"09:00\",\n        \"to\": \"17:00\"\n      }\n    ]\n  },\n  \"contact\": {\n    \"fullName\": null,\n    \"firstName\": null,\n    \"lastName\": null,\n    \"emailAddress\": null,\n    \"phoneNumber\": null,\n    \"locales\": [],\n    \"country\": null,\n    \"notes\": null\n  },\n  \"notes\": null,\n  \"deliveryMethods\": [\n    \"TICKET\",\n    \"VOUCHER\"\n  ],\n  \"voucher\": {\n    \"redemptionMethod\": \"DIGITAL\",\n    \"utcRedeemedAt\": null,\n    \"deliveryOptions\": []\n  },\n  \"unitItems\": [\n    {\n      \"uuid\": \"6cbd2582-1345-4d8d-8223-ad004beebc1a\",\n      \"resellerReference\": null,\n      \"supplierReference\": \"CBIYWQ\",\n      \"unit\": {\n        \"id\": \"adult\",\n        \"internalName\": \"adult\",\n        \"reference\": \"adult\",\n        \"type\": \"ADULT\",\n        \"requiredContactFields\": [],\n        \"restrictions\": {\n          \"minAge\": 18,\n          \"maxAge\": 100,\n          \"idRequired\": false,\n          \"minQuantity\": null,\n          \"maxQuantity\": null,\n          \"paxCount\": 1,\n          \"accompaniedBy\": []\n        }\n      },\n      \"unitId\": \"adult\",\n      \"status\": \"ON_HOLD\",\n      \"utcRedeemedAt\": null,\n      \"contact\": {\n        \"fullName\": null,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"emailAddress\": null,\n        \"phoneNumber\": null,\n        \"locales\": [],\n        \"country\": null,\n        \"notes\": null\n      },\n      \"ticket\": {\n        \"redemptionMethod\": \"DIGITAL\",\n        \"utcRedeemedAt\": null,\n        \"deliveryOptions\": []\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ea3aeca-2ee1-4e8a-8507-ec5885b98ebd",
+              "name": "Example response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bookings",
+                    ":uuid",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) The UUID of the booking"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Required field on all POST requests",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"expirationMinutes\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"INVALID_BOOKING_UUID\",\n  \"errorMessage\": \"The uuid was already used, missing or invalid\",\n  \"uuid\": \"bbbb6227-54fc-4c32-9ed7-dc3eb99966ea\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.example.com/octo",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d6d43eab-9491-4008-8d67-2bad07df936e",
+    "name": "OCTO API Specification Availability Bookings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OCTO (Open Connectivity for Tours, Activities, and Attractions) is an open standard API specification for the in-destination experiences sector of the travel industry. The standard defines agreed-upon schemas, endpoints, and capabilities commonly needed when connecting platforms, resellers, OTAs, and other technologies in tours, activities, and attractions._\n\nOCTO is open source. Available to anyone who wants to use it. You do not need to be a member to use this specification in your business.\n\nContact Support:\n Name: OCTO Standards NP Inc\n Email: sayhello@octo.travel",
+      "type": "text/plain"
+    }
+  }
+}
