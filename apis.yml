@@ -44,6 +44,16 @@ tags:
 - Travel
 - Tours and Activities
 - Booking
+- Experience
+- Distribution
+- OCTO
+- Hospitality
+tags_raw:
+- Company
+- Marketplaces
+- Travel
+- Tours and Activities
+- Booking
 - Experiences
 - Distribution
 - OCTO
@@ -95,6 +105,8 @@ apis:
   humanURL: https://klook.gitbook.io/openapi
   baseURL: https://{supplier_endpoint}/octo
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
