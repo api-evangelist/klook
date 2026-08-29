@@ -159,6 +159,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/klook-capability-edges.yml
+  name: Klook Business Capability Map
 - type: Website
   url: https://www.klook.com/en-US/
 - type: DeveloperPortal
