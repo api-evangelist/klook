@@ -13,6 +13,18 @@ description: >-
   Availability, Bookings) at their own host and Klook consumes them as the
   reseller, with optional Capabilities negotiated through the Octo-Capabilities
   header. Klook additionally runs an affiliate program and a merchant portal.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
