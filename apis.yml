@@ -53,7 +53,7 @@ created: '2026-07-17'
 modified: '2026-07-19'
 tags:
 - Company
-- Marketplaces
+- Marketplace
 - Travel
 - Tours and Activities
 - Booking
@@ -98,6 +98,8 @@ apis:
   humanURL: https://klook.gitbook.io/openapi
   baseURL: https://{supplier_endpoint}/octo
   tags:
+  - Booking
+  tags_raw:
   - Bookings
   properties:
   - type: OpenAPI
