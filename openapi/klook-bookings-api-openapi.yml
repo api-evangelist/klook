@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: OCTO API Specification Availability Bookings API
+  title: OCTO API Specification Bookings API
   version: '1.0'
   contact:
     email: sayhello@octo.travel
@@ -1951,17 +1951,15 @@ paths:
       description: 'Reserving availability when making a booking. The steps to make a reservation are:
 
 
-        1. **Check Availability**: Check the availability on the [/availability](docs/octo/branches/main/5b08f5f75e75d-availability-check) endpoint to retrieve an `availabilityId`
+        1. **Check Availability**: Check the availability on the /availability endpoint to retrieve an `availabilityId`
 
         2. **Booking Reservation** (this step): Create a booking that reserves the availability while you collect payment and contact information from the customer. The booking will remain with status `ON_HOLD` until the booking is confirmed or the reservation hold expires.
 
 
-        The availability for the booking is held for the amount of time equal to the`expirationMinutes` parameter (if provided), up to an internal limit set by either the supplier or the OCTo provider. The `utc_expires_at` parameter in the response object will indicate when a reservtion will expire. A reservation can be extended by calling the [/bookings/{uuid}/extend](docs/octo/branches/main/2c7924ab9128f-extend-reservation) endpoint.
+        The availability for the booking is held for the amount of time equal to the`expirationMinutes` parameter (if provided), up to an internal limit set by either the supplier or the OCTo provider. The `utc_expires_at` parameter in the response object will indicate when a reservtion will expire. A reservation can be extended by calling the /bookings/{uuid}/extend endpoint.
 
 
-        A reserved booking can be confirmed after the customer finalizes their choice on the [/bookings/{uuid}/confirm](docs/octo/branches/main/614d1613b2d70-booking-confirmation) endpoint provided the reservation had not expired.
-
-        '
+        A reserved booking can be confirmed after the customer finalizes their choice on the /bookings/{uuid}/confirm endpoint provided the reservation had not expired.'
     get:
       summary: Get Bookings
       tags:

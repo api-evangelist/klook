@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: OCTO API Specification Availability Products API
+  title: OCTO API Specification Products API
   version: '1.0'
   contact:
     email: sayhello@octo.travel
@@ -528,6 +528,8 @@ paths:
                   - redemptionMethod
                   - options
       description: Fetch the list of products.
+      operationId: getProducts
+      x-operation-id-source: derived
   /products/{id}:
     get:
       summary: Get Product
@@ -1043,6 +1045,8 @@ paths:
                 - redemptionMethod
                 - options
       description: Fetch the product for the given id.
+      operationId: getProductsById
+      x-operation-id-source: derived
 components:
   securitySchemes:
     Auth:

@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: OCTO API Specification Availability API
   version: '1.0'
@@ -279,6 +279,8 @@ paths:
 
 
         When the end user selects an open date you can call on `/availability` endpoint to get the `availabilityId` to create the booking.'
+      operationId: postAvailabilityCalendar
+      x-operation-id-source: derived
   /availability:
     post:
       summary: Availability Check
@@ -596,6 +598,8 @@ paths:
         - `localeDateStart` and `localDateEnd`
 
         - `availabilityIds`'
+      operationId: postAvailability
+      x-operation-id-source: derived
 components:
   securitySchemes:
     Auth:
