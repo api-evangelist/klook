@@ -14,3 +14,82 @@
   relationship: connector-coverage
   status: not-a-workflow
   arazzo: null
+- slug: klook-octo-self-certification-directory-certify-octo-travel
+  label: OCTO self-certification directory (certify.octo.travel)
+  partner_name: OCTO self-certification directory (certify.octo.travel)
+  category: OCTO API self-certification
+  type: register
+  channel: standard-directory
+  evidence: https://certify.octo.travel/verify
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: OCTO self-certification directory (certify.octo.travel)
+    standard: OCTO (Open Connectivity for Tours, Activities & Attractions) API specification
+    spec_file: null
+    spec_url: https://app.swaggerhub.com/apis-docs/OCTO-API/OCTO-API/1.0
+    standard_repo: octo
+    role: octo-certified
+    registrations:
+    - registered_name: Klook Travel
+      register_status: certified
+      register_id: 49EYjox9
+      matched_domain: null
+      matched_by: register-name
+      certificates:
+      - certificate_id: 10803d82-802c-4b19-a5f2-e7288f1ab9a1
+        type: reseller
+        status: APPROVED
+        is_active: true
+        certified_at: '2026-03-09'
+        revoked_at: null
+      register_name_note: 'hand-verified: certify.octo.travel account ''Klook Travel'' (reseller) is Klook Travel
+        Technology, all/klook (klook.com), which the Known Implementations sheet lists live as a reseller'
+    detected_by: sweep-octo-tours-activities.py
+    detected: '2026-10-23'
+    certified_products:
+    - product: OCTO reseller certification
+      lapsed: false
+      certified_at: '2026-03-09'
+      certificate_id: 10803d82-802c-4b19-a5f2-e7288f1ab9a1
+    signal_note: certified_products = one entry per OCTO certification type (reseller / supplier), never per certificate;
+      lapsed = the certificate is no longer active (is_active false)
+    matched_by: register-name
+    identity_source: register-name
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
+  status: not-a-workflow
+  arazzo: null
+- slug: klook-octo-known-implementations-docs-octo-travel
+  label: OCTO Known Implementations (docs.octo.travel)
+  partner_name: OCTO Known Implementations (docs.octo.travel)
+  category: OCTO API implementation (live, self-reported)
+  type: register
+  channel: standard-directory
+  evidence: https://docs.octo.travel/additional-resources/known-implementations
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: OCTO Known Implementations (docs.octo.travel)
+    standard: OCTO (Open Connectivity for Tours, Activities & Attractions) API specification
+    spec_file: null
+    spec_url: https://app.swaggerhub.com/apis-docs/OCTO-API/OCTO-API/1.0
+    standard_repo: octo
+    role: octo-implementer-reseller
+    registrations:
+    - registered_name: Klook
+      register_status: live
+      register_id: reseller:Klook
+      matched_domain: klook.com
+      matched_by: domain
+      implementation_side: reseller
+      capabilities:
+      - OCTO Core
+      - pricing
+      octo_membership: Non-Member
+    detected_by: sweep-octo-tours-activities.py
+    detected: '2026-10-23'
+    signal_note: 'participation only: a LIVE row on OCTO''s volunteer-maintained Known Implementations sheet (self-reported,
+      not certified)'
+  status: not-a-workflow
+  arazzo: null
